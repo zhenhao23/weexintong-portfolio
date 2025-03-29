@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import recordInner from "./assets/record_inner.png";
+import recordOuter from "./assets/record_outer.png"; // Import the outer record image
 
 const VinylSpinner = () => {
   // Change initial rotation value to -40 degrees
@@ -8,6 +9,7 @@ const VinylSpinner = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scale, setScale] = useState(6);
   const controls = useAnimationControls();
+  const outerControls = useAnimationControls(); // Create separate controls for outer record
 
   // Track last update time to control animation frequency
   const lastUpdateTimeRef = useRef(Date.now());
@@ -46,9 +48,14 @@ const VinylSpinner = () => {
         setScale(newScale);
       }
 
-      // Apply both rotation and scale to the animation controls
+      // Apply both rotation and scale to the animation controls (for inner record)
       controls.set({
         rotate: newRotation,
+        scale: newScale,
+      });
+
+      // Apply ONLY scale to the outer record's controls
+      outerControls.set({
         scale: newScale,
       });
 
@@ -62,7 +69,7 @@ const VinylSpinner = () => {
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [rotation, scale, controls]);
+  }, [rotation, scale, controls, outerControls]); // Add outerControls as dependency
 
   // Use wheel events instead of scroll events
   useEffect(() => {
@@ -133,7 +140,7 @@ const VinylSpinner = () => {
   }, []); // No dependencies to prevent re-adding listeners
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center fixed inset-0 bg-gray-900">
+    <div className="h-screen w-screen flex items-center justify-center fixed inset-0 bg-[#1e1e1e]">
       {/* Debug info with more detailed information */}
       <div className="absolute top-4 left-4 text-white text-sm z-10 bg-black/50 p-2 rounded">
         <div>Wheel Delta: {scrollPosition.toFixed(1)}px</div>
@@ -146,19 +153,36 @@ const VinylSpinner = () => {
       </div>
 
       <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
-        {/* The spinning record with size changes */}
-        <motion.div
-          className="w-full h-full"
-          animate={controls}
-          initial={{ rotate: -40, scale: 6 }}
-          transition={{ type: "spring", stiffness: 80, damping: 30 }}
-        >
-          <img
-            src={recordInner}
-            alt="Vinyl Record"
-            className="w-full h-full object-contain"
-          />
-        </motion.div>
+        {/* Record container with both inner and outer parts */}
+        <div className="relative w-full h-full">
+          {/* Outer record (non-spinning part) - scales but doesn't rotate */}
+          <motion.div
+            className="absolute inset-0 w-full h-full"
+            animate={outerControls} // Use outerControls instead of animate prop
+            initial={{ scale: 6 }}
+            transition={{ type: "tween", duration: 0.01 }} // Use tween with very short duration for immediate effect
+          >
+            <img
+              src={recordOuter}
+              alt="Vinyl Record Outer"
+              className="w-full h-full object-contain"
+            />
+          </motion.div>
+
+          {/* Inner record (spinning part) - both scales and rotates */}
+          <motion.div
+            className="absolute inset-0 w-full h-full"
+            animate={controls}
+            initial={{ rotate: -40, scale: 6 }}
+            transition={{ type: "tween", duration: 0.01 }} // Use tween with very short duration for immediate effect
+          >
+            <img
+              src={recordInner}
+              alt="Vinyl Record Inner"
+              className="w-full h-full object-contain"
+            />
+          </motion.div>
+        </div>
       </div>
     </div>
   );
