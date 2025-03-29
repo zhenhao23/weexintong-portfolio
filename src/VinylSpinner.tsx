@@ -17,6 +17,10 @@ const VinylSpinner = () => {
   const targetRotationRef = useRef(-40);
   // Track target scale for smooth resizing
   const targetScaleRef = useRef(6);
+  // Track touch events for mobile
+  const touchStartRef = useRef({ x: 0, y: 0 });
+  const touchMoveRef = useRef({ x: 0, y: 0 });
+  const isTouchingRef = useRef(false);
 
   // Define rotation limits
   const MIN_ROTATION = -40;
@@ -71,79 +75,117 @@ const VinylSpinner = () => {
     };
   }, [rotation, scale, controls, outerControls]); // Add outerControls as dependency
 
-  // Use wheel events instead of scroll events
+  // Process wheel or touch movement with the same logic
+  const processMovement = (deltaY: number) => {
+    // Throttle updates (only process every 16ms - about 60fps)
+    const now = Date.now();
+    if (now - lastUpdateTimeRef.current < 16) {
+      return;
+    }
+    lastUpdateTimeRef.current = now;
+
+    // Calculate rotation delta based on direction and current position
+    let rotationDelta = 0;
+
+    // Only apply rotation in valid range
+    if (
+      (deltaY > 0 && targetRotationRef.current < MAX_ROTATION) ||
+      (deltaY < 0 && targetRotationRef.current > MIN_ROTATION)
+    ) {
+      rotationDelta = deltaY * 0.3;
+    }
+
+    // Update scroll position (for debugging)
+    setScrollPosition((prev) => prev + rotationDelta);
+
+    // Update target rotation - with limits applied
+    const newTargetRotation = targetRotationRef.current + rotationDelta;
+    targetRotationRef.current = Math.max(
+      MIN_ROTATION,
+      Math.min(MAX_ROTATION, newTargetRotation)
+    );
+
+    // Update target scale based on direction
+    const scaleDelta = -deltaY * 0.003; // Negative multiplier to reverse the effect
+
+    // Limit the scale between 2 and 6
+    targetScaleRef.current = Math.max(
+      2,
+      Math.min(6, targetScaleRef.current + scaleDelta)
+    );
+  };
+
+  // Use wheel events for desktop and touch events for mobile
   useEffect(() => {
     // Prevent default scrolling
     const preventScroll = (e: Event) => {
       e.preventDefault();
     };
 
-    // Handle mouse wheel events directly with throttling
+    // Handle mouse wheel events
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
-
-      // Throttle updates (only process every 16ms - about 60fps)
-      const now = Date.now();
-      if (now - lastUpdateTimeRef.current < 16) {
-        return;
-      }
-      lastUpdateTimeRef.current = now;
-
-      // Get the delta from the wheel event
-      const wheelDelta = e.deltaY;
-
-      // Calculate rotation delta based on wheel direction and current position
-      let rotationDelta = 0;
-
-      // Only apply rotation in valid range:
-      // If scrolling down (deltaY > 0) and below max rotation, allow increase
-      // If scrolling up (deltaY < 0) and above min rotation, allow decrease
-      if (
-        (wheelDelta > 0 && targetRotationRef.current < MAX_ROTATION) ||
-        (wheelDelta < 0 && targetRotationRef.current > MIN_ROTATION)
-      ) {
-        rotationDelta = wheelDelta * 0.3;
-      }
-
-      // Update scroll position (for debugging)
-      setScrollPosition((prev) => prev + rotationDelta);
-
-      // Update target rotation - with limits applied
-      const newTargetRotation = targetRotationRef.current + rotationDelta;
-      targetRotationRef.current = Math.max(
-        MIN_ROTATION,
-        Math.min(MAX_ROTATION, newTargetRotation)
-      );
-
-      // Update target scale based on wheel direction
-      const scaleDelta = -e.deltaY * 0.003; // Negative multiplier to reverse the effect
-
-      // Limit the scale between 2 and 6
-      targetScaleRef.current = Math.max(
-        2,
-        Math.min(6, targetScaleRef.current + scaleDelta)
-      );
+      processMovement(e.deltaY);
     };
 
-    // Add wheel event listener
+    // Handle touch start
+    const handleTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+      touchMoveRef.current = { x: touch.clientX, y: touch.clientY };
+      isTouchingRef.current = true;
+    };
+
+    // Handle touch move
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isTouchingRef.current) return;
+
+      const touch = e.touches[0];
+      touchMoveRef.current = { x: touch.clientX, y: touch.clientY };
+
+      // Calculate the difference in Y position since the last frame
+      const deltaY = touchStartRef.current.y - touch.clientY;
+
+      // Process the touch movement with the same handler as wheel
+      processMovement(deltaY * 2); // Multiply by 2 to make touch more sensitive
+
+      // Update reference for next frame
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+    };
+
+    // Handle touch end
+    const handleTouchEnd = () => {
+      isTouchingRef.current = false;
+    };
+
+    // Add event listeners for both wheel and touch
     window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart, { passive: false });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener("touchcancel", handleTouchEnd);
 
     // Prevent default scrolling
     document.body.style.overflow = "hidden";
     document.addEventListener("scroll", preventScroll, { passive: false });
 
     return () => {
+      // Clean up all event listeners
       window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("touchcancel", handleTouchEnd);
       document.removeEventListener("scroll", preventScroll);
       document.body.style.overflow = "";
     };
   }, []); // No dependencies to prevent re-adding listeners
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center fixed inset-0 bg-[#1e1e1e]">
+    <div className="h-screen w-screen flex items-center justify-center fixed inset-0 bg-[#1e1e1e] touch-none">
       {/* Debug info with more detailed information */}
       <div className="absolute top-4 left-4 text-white text-sm z-10 bg-black/50 p-2 rounded">
-        <div>Wheel Delta: {scrollPosition.toFixed(1)}px</div>
+        <div>Wheel/Touch Delta: {scrollPosition.toFixed(1)}px</div>
         <div>Rotation: {rotation.toFixed(1)}°</div>
         <div>Scale: {scale.toFixed(2)}x</div>
         <div>Target: {targetRotationRef.current.toFixed(1)}°</div>
@@ -158,9 +200,9 @@ const VinylSpinner = () => {
           {/* Outer record (non-spinning part) - scales but doesn't rotate */}
           <motion.div
             className="absolute inset-0 w-full h-full"
-            animate={outerControls} // Use outerControls instead of animate prop
+            animate={outerControls}
             initial={{ scale: 6 }}
-            transition={{ type: "tween", duration: 0.01 }} // Use tween with very short duration for immediate effect
+            transition={{ type: "tween", duration: 0.01 }}
           >
             <img
               src={recordOuter}
@@ -174,7 +216,7 @@ const VinylSpinner = () => {
             className="absolute inset-0 w-full h-full"
             animate={controls}
             initial={{ rotate: -40, scale: 6 }}
-            transition={{ type: "tween", duration: 0.01 }} // Use tween with very short duration for immediate effect
+            transition={{ type: "tween", duration: 0.01 }}
           >
             <img
               src={recordInner}
