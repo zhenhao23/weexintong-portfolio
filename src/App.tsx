@@ -1,9 +1,9 @@
-import VinylSpinner from "./VinylSpinner";
+import ScrollTriggerCircularCards from "./ScrollTriggerCircularCards";
 
 function App() {
   return (
     <div className="bg-black text-white">
-      <VinylSpinner />
+      <ScrollTriggerCircularCards />
     </div>
   );
 }
