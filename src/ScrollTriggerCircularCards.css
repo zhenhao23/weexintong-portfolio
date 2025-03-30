@@ -35,6 +35,7 @@ h1 {
 .wheel {
   position: absolute;
   top: 0;
+  left: 40%; /* Set left to 0 to touch the left edge of the screen */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -42,8 +43,7 @@ h1 {
   height: 300vw;
   max-width: 2000px;
   max-height: 2000px;
-  /* left: 10%; */
-  transform: translateY(-60%);
+  transform: translateY(-58%);
 }
 
 .wheel__card {

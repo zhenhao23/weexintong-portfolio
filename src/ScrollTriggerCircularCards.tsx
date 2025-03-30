@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./ScrollTriggerCircularCards.css";
@@ -8,8 +8,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 const ScrollTriggerCircularCards = () => {
   const wheelRef = useRef<HTMLDivElement>(null);
-  const [rotationAngle, setRotationAngle] = useState(0);
-  const scrollRef = useRef<number>(0);
+  const rotationAngleRef = useRef(0);
+  const animationRef = useRef<gsap.core.Tween | null>(null);
+  const velocityRef = useRef<number>(0);
+  const lastTimeRef = useRef<number>(0);
 
   useEffect(() => {
     // Get all card elements
@@ -30,8 +32,8 @@ const ScrollTriggerCircularCards = () => {
       if (!wheel) return;
 
       const center = wheel.offsetWidth / 2;
-      const radiusX = wheel.offsetWidth / 3; // Wider horizontally
-      const radiusY = wheel.offsetWidth / 5; // Shorter vertically
+      const radiusX = wheel.offsetWidth / 2; // Wider horizontally
+      const radiusY = wheel.offsetWidth / 4.5; // Shorter vertically
       const slice = (2 * Math.PI) / totalCards;
 
       cards.forEach((card, i) => {
@@ -48,21 +50,20 @@ const ScrollTriggerCircularCards = () => {
           y: y,
           xPercent: -50,
           yPercent: -50,
-          // No rotation needed here - cards stay upright naturally
         });
       });
 
       // Update opacity after positions change
-      // updateOpacity();
+      updateOpacity();
     };
 
     // Function to update opacity based on card's position
     const updateOpacity = () => {
       const windowHeight = window.innerHeight;
       const windowWidth = window.innerWidth;
-      const startFadeY = windowHeight * 0.2;
-      const visibilityThreshold = windowWidth * 0.6;
-      const transitionZone = windowWidth * 0.1;
+      const startFadeY = windowHeight * 0.1;
+      const visibilityThreshold = windowWidth * 1;
+      const transitionZone = windowWidth * 0.2;
 
       cards.forEach((card) => {
         const rect = card.getBoundingClientRect();
@@ -72,7 +73,7 @@ const ScrollTriggerCircularCards = () => {
         let opacity = 1;
 
         if (cardY < startFadeY) {
-          opacity = 0.3 + (0.7 * cardY) / startFadeY;
+          opacity = 0.9 + (0.1 * cardY) / startFadeY;
         }
 
         if (cardX > visibilityThreshold - transitionZone) {
@@ -94,37 +95,83 @@ const ScrollTriggerCircularCards = () => {
     updateCardPositions();
 
     // Add resize event listener
-    const handleResize = () => updateCardPositions(rotationAngle);
+    const handleResize = () => updateCardPositions(rotationAngleRef.current);
     window.addEventListener("resize", handleResize);
 
     // Handle wheel event for moving cards along path
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
 
-      // Adjust sensitivity as needed
-      const sensitivity = 0.005; // Smaller value for smoother motion
-      const delta = e.deltaY * sensitivity;
+      const now = performance.now();
+      const elapsed = now - lastTimeRef.current;
+      lastTimeRef.current = now;
 
-      // Update scroll reference
-      scrollRef.current += delta;
+      // Get the raw delta for velocity calculation with direction explicitly preserved
+      const sensitivity = 0.0002;
 
-      // Calculate new angle (in radians)
-      const newAngle = rotationAngle + delta;
-      setRotationAngle(newAngle);
+      // CHANGE: Reverse the sign of rawDelta to change rotation direction
+      const rawDelta = -e.deltaY * sensitivity; // Added negative sign here
 
-      // Animate cards to new positions
-      gsap.to(
+      // Force a sign to the rawDelta to ensure direction is preserved
+      // CHANGE: Reverse the direction
+      const scrollDirection = -Math.sign(e.deltaY); // Added negative sign here
+
+      // Rest of your code remains the same
+      if (elapsed > 0) {
+        // Apply smoother damping
+        velocityRef.current =
+          0.85 * velocityRef.current + 0.15 * ((rawDelta / elapsed) * 16);
+
+        // Ensure velocity has same sign as scroll direction
+        if (
+          Math.sign(velocityRef.current) !== scrollDirection &&
+          scrollDirection !== 0
+        ) {
+          velocityRef.current = Math.abs(velocityRef.current) * scrollDirection;
+        }
+      }
+      // Cancel any existing animation
+      if (animationRef.current) {
+        animationRef.current.kill();
+      }
+
+      // For small scrolls, don't apply immediate jump,
+      // instead rely entirely on the animation
+      const minScrollVelocity = 0.01;
+
+      // Always use the original scroll direction for small scrolls
+      if (Math.abs(velocityRef.current) < minScrollVelocity) {
+        velocityRef.current = scrollDirection * minScrollVelocity;
+      }
+
+      // Log for debugging
+      console.log(
+        "Direction:",
+        scrollDirection,
+        "Velocity:",
+        velocityRef.current
+      );
+
+      // Instead of direct update, animate to target position smoothly
+      // Instead of direct update, animate to target position smoothly
+      animationRef.current = gsap.to(
         {},
         {
-          duration: 0.5,
-          ease: "power1.out",
+          duration: 1.5, // Increased from 0.8 to 2.0 seconds
+          ease: "power1.out", // Changed to a more gradual easing
           onUpdate: function () {
-            // Get interpolated value between old and new angle
             const progress = this.progress();
-            const currentAngle = rotationAngle + delta * progress;
+            const decayFactor = 1 - Math.pow(progress, 0.7); // More gradual decay curve
 
-            // Update card positions with the interpolated angle
-            updateCardPositions(currentAngle);
+            // Combined movement calculation with reduced decay
+            const momentumDelta = velocityRef.current * decayFactor * 0.5;
+
+            // Apply movement to rotation angle
+            rotationAngleRef.current += momentumDelta;
+            updateCardPositions(rotationAngleRef.current);
+          },
+          onComplete: function () {
+            velocityRef.current *= 0.3; // Reduce less aggressively (was 0.5)
           },
         }
       );
@@ -135,44 +182,122 @@ const ScrollTriggerCircularCards = () => {
 
     // Track touch events for mobile
     let touchStartY = 0;
+    let lastTouchY = 0;
+    let lastTouchTime = 0;
 
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
+      lastTouchY = touchStartY;
+      lastTouchTime = performance.now();
+
+      // Kill any existing animations when user starts touching
+      if (animationRef.current) {
+        animationRef.current.kill();
+      }
+
       e.preventDefault();
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault();
       const touchY = e.touches[0].clientY;
-      const deltaY = touchStartY - touchY;
+      const now = performance.now();
+      const elapsed = now - lastTouchTime;
 
-      // Similar to wheel event handling
-      const sensitivity = 0.01;
-      const delta = deltaY * sensitivity;
+      // Calculate delta and velocity (similar to wheel handler)
+      const deltaY = lastTouchY - touchY;
+      const sensitivity = 0.003;
 
-      // Update angle
-      const newAngle = rotationAngle + delta;
-      setRotationAngle(newAngle);
+      // CHANGE: Reverse the sign of rawDelta to change rotation direction
+      const rawDelta = -deltaY * sensitivity; // Added negative sign here
 
-      // Animate cards to new positions
-      gsap.to(
+      // Force a sign to the rawDelta to ensure direction is preserved
+      // CHANGE: Reverse the direction
+      const touchDirection = -Math.sign(deltaY); // Added negative sign here
+
+      // Rest of your code remains the same
+      if (elapsed > 0) {
+        // Apply smoother damping (same as wheel handler)
+        velocityRef.current =
+          0.85 * velocityRef.current + 0.15 * ((rawDelta / elapsed) * 16);
+
+        // Ensure velocity has same sign as touch direction
+        if (
+          Math.sign(velocityRef.current) !== touchDirection &&
+          touchDirection !== 0
+        ) {
+          velocityRef.current = Math.abs(velocityRef.current) * touchDirection;
+        }
+      }
+
+      lastTouchY = touchY;
+      lastTouchTime = now;
+
+      // Cancel any existing animation
+      if (animationRef.current) {
+        animationRef.current.kill();
+      }
+
+      // For small movements, don't apply immediate jump,
+      // instead rely entirely on the animation
+      const minTouchVelocity = 0.01;
+
+      // Always use the original touch direction for small movements
+      if (Math.abs(velocityRef.current) < minTouchVelocity) {
+        velocityRef.current = touchDirection * minTouchVelocity;
+      }
+
+      // Instead of direct update, animate to target position smoothly - same as wheel handler
+      animationRef.current = gsap.to(
         {},
         {
-          duration: 0.2,
+          duration: 1.5,
           ease: "power1.out",
           onUpdate: function () {
             const progress = this.progress();
-            const currentAngle = rotationAngle + delta * progress;
-            updateCardPositions(currentAngle);
+            const decayFactor = 1 - Math.pow(progress, 0.7);
+
+            // Combined movement calculation with reduced decay
+            const momentumDelta = velocityRef.current * decayFactor * 0.5;
+
+            // Apply movement to rotation angle
+            rotationAngleRef.current += momentumDelta;
+            updateCardPositions(rotationAngleRef.current);
+          },
+          onComplete: function () {
+            velocityRef.current *= 0.3;
           },
         }
       );
+    };
 
-      touchStartY = touchY;
+    const handleTouchEnd = () => {
+      // We only need to handle touchend if no animation is running
+      // If animation is already running from touchmove, we can let it continue
+      if (!animationRef.current && Math.abs(velocityRef.current) > 0.0001) {
+        animationRef.current = gsap.to(
+          {},
+          {
+            duration: 1.5,
+            ease: "power1.out",
+            onUpdate: function () {
+              const progress = this.progress();
+              const decayFactor = 1 - Math.pow(progress, 0.7);
+              const momentumDelta = velocityRef.current * decayFactor * 0.5;
+              rotationAngleRef.current += momentumDelta;
+              updateCardPositions(rotationAngleRef.current);
+            },
+            onComplete: function () {
+              velocityRef.current *= 0.3;
+            },
+          }
+        );
+      }
     };
 
     window.addEventListener("touchstart", handleTouchStart, { passive: false });
     window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("touchend", handleTouchEnd);
 
     // Cleanup
     return () => {
@@ -180,17 +305,21 @@ const ScrollTriggerCircularCards = () => {
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+      if (animationRef.current) {
+        animationRef.current.kill();
+      }
     };
-  }, [rotationAngle]);
+  }, []); // Empty dependency array - only run once
 
   return (
     <>
       <div className="header"></div>
       <section className="slider-section">
         <div className="wheel" ref={wheelRef}>
-          {[...Array(21)].map((_, i) => {
+          {[...Array(17)].map((_, i) => {
             // Reverse the index to affect render order (and thus z-index)
-            const index = 20 - i;
+            const index = 16 - i;
             return (
               <div className="wheel__card" key={index}>
                 <img
