@@ -53,7 +53,7 @@ const ScrollTriggerCircularCards = () => {
       });
 
       // Update opacity after positions change
-      updateOpacity();
+      // updateOpacity();
     };
 
     // Function to update opacity based on card's position
