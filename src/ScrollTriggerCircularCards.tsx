@@ -18,6 +18,9 @@ import photo9 from "./assets/portfolio pics/street3.jpg";
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
+// Add this line to detect Safari browser
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
 const ScrollTriggerCircularCards = () => {
   const wheelRef = useRef<HTMLDivElement>(null);
   const rotationAngleRef = useRef(0);
@@ -119,8 +122,16 @@ const ScrollTriggerCircularCards = () => {
           opacity *= horizontalFactor;
         }
 
+        // Use autoAlpha instead of opacity to preserve the backdrop-filter
         gsap.set(card, {
-          opacity: opacity,
+          // Don't use autoAlpha here, instead include opacity in the CSS object
+          css: {
+            opacity: opacity,
+            visibility: opacity > 0 ? "visible" : "hidden", // This is what autoAlpha does
+            backdropFilter: "blur(10px)",
+            // Only include webkit prefix in development if needed
+            ...(isSafari ? { webkitBackdropFilter: "blur(20px)" } : {}),
+          },
         });
       });
     };
@@ -179,12 +190,12 @@ const ScrollTriggerCircularCards = () => {
       }
 
       // Log for debugging
-      console.log(
-        "Direction:",
-        scrollDirection,
-        "Velocity:",
-        velocityRef.current
-      );
+      // console.log(
+      //   "Direction:",
+      //   scrollDirection,
+      //   "Velocity:",
+      //   velocityRef.current
+      // );
 
       // Instead of direct update, animate to target position smoothly
       // Instead of direct update, animate to target position smoothly

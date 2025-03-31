@@ -8,21 +8,33 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "New Science";
+  src: url("./assets/fonts/fonnts.com-New_Science_Medium.otf")
+      format("opentype"),
+    url("./assets/fonts/fonnts.com-New_Science_Medium_Extended.otf")
+      format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Update the body styles to remove the fixed height */
 body {
   padding: 0;
   margin: 0;
   /* Remove the fixed height: height: 600vh; */
   width: 100vw;
-  font-family: "Nunito", sans-serif;
+  font-family: "New Science", sans-serif;
   background-color: #f9f9f9;
   color: white;
   overflow: hidden; /* Prevent default scrolling */
 }
 
 h1 {
-  font-family: "longline";
+  font-family: "New Science", sans-serif;
   font-size: 10vw;
+  font-weight: 500;
 }
 
 .slider-section {
@@ -54,6 +66,7 @@ h1 {
   max-width: 300px;
   /* aspect-ratio: 16 / 10; */
   cursor: pointer;
+  border-radius: 8px;
 }
 
 img {
@@ -95,7 +108,8 @@ img {
   left: 50%;
   transform: translate(-50%, 0);
   color: white;
-  font-weight: 400;
+  font-weight: 500;
+  font-family: "New Science", sans-serif;
   text-transform: uppercase;
   font-size: 14px;
   overflow: visible;
@@ -122,8 +136,8 @@ img {
     255,
     0.2
   ); /* Light semi-transparent background */
-  backdrop-filter: blur(10px); /* Creates frosted glass effect */
-  -webkit-backdrop-filter: blur(10px); /* For Safari */
+  backdrop-filter: blur(20px); /* Creates frosted glass effect */
+  -webkit-backdrop-filter: blur(20px); /* For Safari */
   border-radius: 8px;
   overflow: hidden;
   padding-bottom: 4px;
@@ -134,20 +148,19 @@ img {
   flex-direction: column;
   border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle light border */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
+/* Update other text elements to use the new font */
 .card-title {
   position: relative;
   width: 100%;
   margin: 0;
-  padding: 8px 0;
+  padding: 2px 0;
   text-align: center;
   color: rgba(255, 255, 255, 0.85); /* Light color for better visibility */
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   font-weight: 500;
-
+  font-family: "New Science", sans-serif;
   z-index: 10;
 }
 
