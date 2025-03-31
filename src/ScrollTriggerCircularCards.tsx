@@ -57,20 +57,42 @@ const ScrollTriggerCircularCards = () => {
     const totalCards = cards.length;
 
     // Arrow animation
-    gsap.to(".arrow", {
-      y: 5,
-      ease: "power1.inOut",
-      repeat: -1,
-      yoyo: true,
-    });
+    // gsap.to(".arrow", {
+    //   y: 5,
+    //   ease: "power1.inOut",
+    //   repeat: -1,
+    //   yoyo: true,
+    // });
 
     // Function to update card positions based on current rotation angle
     const updateCardPositions = (currentAngle = 0) => {
       if (!wheel) return;
 
       const center = wheel.offsetWidth / 2;
-      const radiusX = wheel.offsetWidth / 2; // Wider horizontally
-      const radiusY = wheel.offsetWidth / 4.5; // Shorter vertically
+
+      // Get the current viewport width
+      const viewportWidth = window.innerWidth;
+
+      // Define different radius ratios based on screen size
+      let horizontalRatio = 2; // Default (desktop): offsetWidth / 2
+      let verticalRatio = 4.5; // Default (desktop): offsetWidth / 4.5
+
+      // Adjust ratios for tablet
+      if (viewportWidth <= 1024 && viewportWidth > 767) {
+        horizontalRatio = 2.3; // Make ellipse wider on tablets
+        verticalRatio = 3; // Make ellipse slightly flatter
+      }
+
+      // Adjust ratios for mobile
+      if (viewportWidth <= 767) {
+        horizontalRatio = 2.3; // Make ellipse wider on mobile
+        verticalRatio = 3; // Make ellipse flatter on mobile
+      }
+
+      // Calculate the actual radius values
+      const radiusX = wheel.offsetWidth / horizontalRatio;
+      const radiusY = wheel.offsetWidth / verticalRatio;
+
       const slice = (2 * Math.PI) / totalCards;
 
       cards.forEach((card, i) => {
@@ -115,27 +137,34 @@ const ScrollTriggerCircularCards = () => {
 
         if (cardX > visibilityThreshold - transitionZone) {
           const horizontalFactor = Math.max(
-            0,
+            0.3,
             1 -
               (cardX - (visibilityThreshold - transitionZone)) / transitionZone
           );
           opacity *= horizontalFactor;
         }
 
-        // Use autoAlpha instead of opacity to preserve the backdrop-filter
-        gsap.set(card, {
-          // Don't use autoAlpha here, instead include opacity in the CSS object
-          css: {
+        // Fix: Apply styles directly to the element instead of using GSAP for backdrop-filter
+        if (opacity > 0) {
+          gsap.set(card, {
             opacity: opacity,
-            visibility: opacity > 0 ? "visible" : "hidden", // This is what autoAlpha does
-            backdropFilter: "blur(10px)",
-            // Only include webkit prefix in development if needed
-            ...(isSafari ? { webkitBackdropFilter: "blur(20px)" } : {}),
-          },
-        });
+            visibility: "visible",
+          });
+
+          // Apply backdrop-filter directly to the element
+          card.style.backdropFilter = "blur(20px)";
+          if (isSafari) {
+            // Use type assertion to bypass TypeScript's type checking for the vendor prefix
+            (card.style as any).webkitBackdropFilter = "blur(20px)";
+          }
+        } else {
+          gsap.set(card, {
+            opacity: 0,
+            visibility: "hidden",
+          });
+        }
       });
     };
-
     // Initial setup
     updateCardPositions();
 
@@ -382,10 +411,10 @@ const ScrollTriggerCircularCards = () => {
         </div>
       </section>
 
-      <div className="scroll-down">
+      {/* <div className="scroll-down">
         Scroll down
         <div className="arrow"></div>
-      </div>
+      </div> */}
     </>
   );
 };

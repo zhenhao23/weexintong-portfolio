@@ -170,3 +170,70 @@ img {
   object-fit: cover;
   flex-grow: 1; /* Allow the image to fill available space */
 }
+
+/* ...existing code... */
+
+/* Media Queries for Tablets and Mobile Devices */
+@media screen and (max-width: 1024px) {
+  .wheel {
+    left: 30%; /* Adjust the wheel position for tablets */
+    width: 350vw; /* Make wheel larger on smaller screens to maintain visibility */
+    height: 350vw;
+  }
+
+  .wheel__card {
+    width: 40%; /* Larger cards on tablet */
+    max-width: 400px;
+  }
+
+  h1 {
+    font-size: 12vw; /* Larger font size for better readability */
+  }
+
+  .header img {
+    width: 50vw;
+    height: 50vw;
+  }
+}
+
+/* Specific adjustments for mobile phones */
+@media screen and (max-width: 767px) {
+  .wheel {
+    left: 15%; /* Position wheel closer to screen edge on mobile */
+    width: 400vw; /* Even larger wheel relative to viewport */
+    height: 400vw;
+  }
+
+  .wheel__card {
+    width: 40%; /* Larger cards on mobile */
+    max-width: 300px;
+  }
+
+  .card-title {
+    font-size: 0.5rem; /* Slightly smaller font for card titles */
+  }
+
+  h1 {
+    font-size: 14vw;
+  }
+
+  .header {
+    height: 40vh; /* Reduce header height on mobile */
+  }
+
+  .header img {
+    width: 60vw;
+    height: 60vw;
+    max-height: 250px;
+    max-width: 250px;
+  }
+
+  .slider-section {
+    height: 30vh; /* More vertical space for slider on mobile */
+  }
+
+  .scroll-down {
+    bottom: 10px;
+    font-size: 12px;
+  }
+}
