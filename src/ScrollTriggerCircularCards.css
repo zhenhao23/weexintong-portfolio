@@ -15,7 +15,7 @@ body {
   /* Remove the fixed height: height: 600vh; */
   width: 100vw;
   font-family: "Nunito", sans-serif;
-  background-color: #1e1e1e;
+  background-color: #f9f9f9;
   color: white;
   overflow: hidden; /* Prevent default scrolling */
 }
@@ -52,7 +52,7 @@ h1 {
   left: 0;
   width: 16%;
   max-width: 300px;
-  aspect-ratio: 16 / 10;
+  /* aspect-ratio: 16 / 10; */
   cursor: pointer;
 }
 
@@ -63,11 +63,11 @@ img {
   cursor: pointer;
 }
 
-.wheel__card img {
+/* .wheel__card img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* or 'contain' depending on your preference */
-}
+  object-fit: cover;
+} */
 
 .header {
   position: fixed;
@@ -110,4 +110,50 @@ img {
   filter: invert(1);
   background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHBhdGggZmlsbD0iYmxhY2siIGQ9Ik00ODMuMiwxOTIuMmMtMjAuNS0yMC41LTUzLjUtMjAuOC03My43LTAuNkwyNTcsMzQ0LjFMMTA0LjUsMTkxLjZjLTIwLjItMjAuMi01My4yLTE5LjktNzMuNywwLjYKCWMtMjAuNSwyMC41LTIwLjgsNTMuNS0wLjYsNzMuN2wxOTAsMTkwYzEwLjEsMTAuMSwyMy40LDE1LjEsMzYuOCwxNWMxMy4zLDAuMSwyNi43LTQuOSwzNi44LTE1bDE5MC0xOTAKCUM1MDMuOSwyNDUuNyw1MDMuNywyMTIuNyw0ODMuMiwxOTIuMnoiLz4KPC9zdmc+);
   background-size: contain;
+}
+
+.card-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.2
+  ); /* Light semi-transparent background */
+  backdrop-filter: blur(10px); /* Creates frosted glass effect */
+  -webkit-backdrop-filter: blur(10px); /* For Safari */
+  border-radius: 8px;
+  overflow: hidden;
+  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle light border */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.card-title {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 8px 0;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.85); /* Light color for better visibility */
+  font-size: 0.75rem;
+  font-weight: 500;
+
+  z-index: 10;
+}
+
+.wheel__card img {
+  width: 100%;
+  height: 100%; /* Changed from 100% */
+  object-fit: cover;
+  flex-grow: 1; /* Allow the image to fill available space */
 }

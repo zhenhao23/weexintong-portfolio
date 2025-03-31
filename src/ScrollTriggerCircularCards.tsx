@@ -3,6 +3,18 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./ScrollTriggerCircularCards.css";
 
+// Import your portfolio images
+// You can replace the placeholders with actual imports later
+import photo1 from "./assets/portfolio pics/DWMU1.png";
+import photo2 from "./assets/portfolio pics/DWMU2.png";
+import photo3 from "./assets/portfolio pics/fashion1.jpg";
+import photo4 from "./assets/portfolio pics/fashion2.jpg";
+import photo5 from "./assets/portfolio pics/FK.png";
+import photo6 from "./assets/portfolio pics/profile pic.jpg";
+import photo7 from "./assets/portfolio pics/street1.jpg";
+import photo8 from "./assets/portfolio pics/street2.jpg";
+import photo9 from "./assets/portfolio pics/street3.jpg";
+
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,6 +24,28 @@ const ScrollTriggerCircularCards = () => {
   const animationRef = useRef<gsap.core.Tween | null>(null);
   const velocityRef = useRef<number>(0);
   const lastTimeRef = useRef<number>(0);
+
+  // Create an array with all portfolio images, duplicated to get 18 items
+  const portfolioImages = [
+    photo1,
+    photo2,
+    photo3,
+    photo4,
+    photo5,
+    photo6,
+    photo7,
+    photo8,
+    photo9,
+    photo1,
+    photo2,
+    photo3,
+    photo4,
+    photo5,
+    photo6,
+    photo7,
+    photo8,
+    photo9,
+  ];
 
   useEffect(() => {
     // Get all card elements
@@ -107,7 +141,7 @@ const ScrollTriggerCircularCards = () => {
       lastTimeRef.current = now;
 
       // Get the raw delta for velocity calculation with direction explicitly preserved
-      const sensitivity = 0.0002;
+      const sensitivity = 0.0003;
 
       // CHANGE: Reverse the sign of rawDelta to change rotation direction
       const rawDelta = -e.deltaY * sensitivity; // Added negative sign here
@@ -317,17 +351,20 @@ const ScrollTriggerCircularCards = () => {
       <div className="header"></div>
       <section className="slider-section">
         <div className="wheel" ref={wheelRef}>
-          {[...Array(17)].map((_, i) => {
+          {[...Array(18)].map((_, i) => {
             // Reverse the index to affect render order (and thus z-index)
-            const index = 16 - i;
+            const index = 17 - i;
+            // Get the title based on the original image (mod 9)
+            const titleIndex = (index % 9) + 1;
             return (
               <div className="wheel__card" key={index}>
-                <img
-                  src={`https://assets.codepen.io/756881/amys-${
-                    (index % 7) + 1
-                  }.jpg`}
-                  alt={`Card ${index + 1}`}
-                />
+                <div className="card-container">
+                  <h3 className="card-title">Project {titleIndex}</h3>
+                  <img
+                    src={portfolioImages[index % 18]}
+                    alt={`Portfolio ${titleIndex}`}
+                  />
+                </div>
               </div>
             );
           })}
