@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useAnimationControls } from "framer-motion";
-import recordInner from "./assets/record_inner.png";
-import recordOuter from "./assets/record_outer.png"; // Import the outer record image
+import recordInner from "./assets/vinyl record/record_inner.png";
+import recordOuter from "./assets/vinyl record/record_outer.png"; // Import the outer record image
 
 const VinylSpinner = () => {
   // Change initial rotation value to -40 degrees
@@ -10,6 +10,9 @@ const VinylSpinner = () => {
   const [scale, setScale] = useState(6);
   const controls = useAnimationControls();
   const outerControls = useAnimationControls(); // Create separate controls for outer record
+
+  // Add state to track if device is mobile
+  const [isMobile, setIsMobile] = useState(false);
 
   // Track last update time to control animation frequency
   const lastUpdateTimeRef = useRef(Date.now());
@@ -25,6 +28,32 @@ const VinylSpinner = () => {
   // Define rotation limits
   const MIN_ROTATION = -40;
   const MAX_ROTATION = 360;
+
+  // Add a ref to track mobile status
+  const isMobileRef = useRef(false);
+
+  // Check for mobile device on component mount and window resize
+  useEffect(() => {
+    const checkIfMobile = () => {
+      const isMobileDevice = window.matchMedia("(max-width: 768px)").matches;
+      // console.log("Device detection:", isMobileDevice ? "Mobile" : "Desktop");
+
+      // Update both the state and the ref
+      setIsMobile(isMobileDevice);
+      isMobileRef.current = isMobileDevice;
+    };
+
+    // Initial check
+    checkIfMobile();
+
+    // Add resize listener
+    window.addEventListener("resize", checkIfMobile);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("resize", checkIfMobile);
+    };
+  }, []);
 
   // Smooth animation loop for both rotation and scale
   useEffect(() => {
@@ -105,12 +134,21 @@ const VinylSpinner = () => {
       Math.min(MAX_ROTATION, newTargetRotation)
     );
 
-    // Update target scale based on direction
-    const scaleDelta = -deltaY * 0.003; // Negative multiplier to reverse the effect
+    // Update target scale based on direction and device type
+    const scaleFactor = isMobileRef.current ? 0.0035 : 0.003; // Higher sensitivity for mobile
+    // console.log(
+    //   "Using scale factor:",
+    //   scaleFactor,
+    //   "for",
+    //   isMobileRef.current ? "mobile" : "desktop"
+    // );
+    const scaleDelta = -deltaY * scaleFactor;
 
-    // Limit the scale between 2 and 6
+    // Limit the scale based on device type
+    const minScale = isMobileRef.current ? 1.5 : 2; // Lower min scale for mobile
+    // console.log("Using min scale:", minScale);
     targetScaleRef.current = Math.max(
-      2,
+      minScale,
       Math.min(6, targetScaleRef.current + scaleDelta)
     );
   };
@@ -189,6 +227,7 @@ const VinylSpinner = () => {
         <div>Rotation: {rotation.toFixed(1)}°</div>
         <div>Scale: {scale.toFixed(2)}x</div>
         <div>Target: {targetRotationRef.current.toFixed(1)}°</div>
+        <div>Device: {isMobile ? "Mobile" : "Desktop"}</div>
         <div>
           Limits: {MIN_ROTATION}° to {MAX_ROTATION}°
         </div>
