@@ -85,7 +85,7 @@ const ScrollTriggerCircularCards = () => {
 
       // Adjust ratios for mobile
       if (viewportWidth <= 767) {
-        horizontalRatio = 2.3; // Make ellipse wider on mobile
+        horizontalRatio = 2.4; // Make ellipse wider on mobile
         verticalRatio = 3; // Make ellipse flatter on mobile
       }
 

@@ -206,7 +206,7 @@ img {
 
   .wheel__card {
     width: 40%; /* Larger cards on mobile */
-    max-width: 300px;
+    max-width: 240px;
   }
 
   .card-title {
