@@ -1,33 +1,38 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import recordInner from "./assets/vinyl record/record_inner.png";
-import recordOuter from "./assets/vinyl record/record_outer.png"; // Import the outer record image
+import recordOuter from "./assets/vinyl record/record_outer.png";
 
-const VinylSpinner = () => {
-  // Change initial rotation value to -40 degrees
+// Add onReachLimit prop to component definition
+interface VinylSpinnerProps {
+  onReachLimit: () => void;
+}
+
+const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
   const [rotation, setRotation] = useState(-40);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scale, setScale] = useState(6);
   const controls = useAnimationControls();
-  const outerControls = useAnimationControls(); // Create separate controls for outer record
-
-  // Add state to track if device is mobile
+  const outerControls = useAnimationControls();
   const [isMobile, setIsMobile] = useState(false);
-
-  // Track last update time to control animation frequency
   const lastUpdateTimeRef = useRef(Date.now());
-  // Track target rotation for smooth animation - also set to -40
   const targetRotationRef = useRef(-40);
-  // Track target scale for smooth resizing
   const targetScaleRef = useRef(6);
-  // Track touch events for mobile
   const touchStartRef = useRef({ x: 0, y: 0 });
   const touchMoveRef = useRef({ x: 0, y: 0 });
   const isTouchingRef = useRef(false);
+  const hasReachedLimitRef = useRef(false); // Track if we've already triggered the transition
+  const maxRotationReachedRef = useRef(false); // Track if max rotation has been reached
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const transitionTimeoutRef = useRef<number | null>(null);
+  const animationCompleteRef = useRef(false);
 
   // Define rotation limits
   const MIN_ROTATION = -40;
   const MAX_ROTATION = 360;
+
+  // Define scale limits, but we won't use them for transition anymore
+  const MIN_SCALE = isMobile ? 1.5 : 2;
 
   // Add a ref to track mobile status
   const isMobileRef = useRef(false);
@@ -71,14 +76,24 @@ const VinylSpinner = () => {
       const targetScale = targetScaleRef.current;
       const newScale = currentScale + (targetScale - currentScale) * 0.05;
 
-      // Update rotation if it's changed enough
-      if (Math.abs(newRotation - rotation) > 0.01) {
+      // Update rotation if it's changed enough - use a slightly larger threshold
+      if (Math.abs(newRotation - rotation) > 0.001) {
         setRotation(newRotation);
+        animationCompleteRef.current = false;
       }
 
-      // Update scale if it's changed enough
-      if (Math.abs(newScale - scale) > 0.001) {
+      // Update scale if it's changed enough - use a slightly larger threshold
+      if (Math.abs(newScale - scale) > 0.0001) {
         setScale(newScale);
+        animationCompleteRef.current = false;
+      }
+
+      // Check if animation has essentially completed - use bigger thresholds
+      if (
+        Math.abs(newRotation - targetRotation) < 0.1 &&
+        Math.abs(newScale - targetScale) < 0.01
+      ) {
+        animationCompleteRef.current = true;
       }
 
       // Apply both rotation and scale to the animation controls (for inner record)
@@ -101,11 +116,25 @@ const VinylSpinner = () => {
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+      if (failSafeTimerRef.current) {
+        clearTimeout(failSafeTimerRef.current);
+      }
     };
-  }, [rotation, scale, controls, outerControls]); // Add outerControls as dependency
+  }, [rotation, scale, controls, outerControls]);
 
-  // Process wheel or touch movement with the same logic
+  // Add a fail-safe timer ref
+  const failSafeTimerRef = useRef<number | null>(null);
+
+  // Modify the processMovement function
   const processMovement = (deltaY: number) => {
+    // Don't process movement during transition
+    if (isTransitioning) {
+      return;
+    }
+
     // Throttle updates (only process every 16ms - about 60fps)
     const now = Date.now();
     if (now - lastUpdateTimeRef.current < 16) {
@@ -115,6 +144,29 @@ const VinylSpinner = () => {
 
     // Calculate rotation delta based on direction and current position
     let rotationDelta = 0;
+
+    // Check if we've already hit max rotation
+    if (targetRotationRef.current >= MAX_ROTATION) {
+      maxRotationReachedRef.current = true;
+
+      // Clear previous fail-safe timer if any
+      if (failSafeTimerRef.current) {
+        clearTimeout(failSafeTimerRef.current);
+      }
+
+      // Set a fail-safe timer to ensure transition happens after 1 second
+      // if animation doesn't complete naturally
+      if (!hasReachedLimitRef.current && !isTransitioning) {
+        failSafeTimerRef.current = window.setTimeout(() => {
+          if (!hasReachedLimitRef.current) {
+            console.log("Fail-safe timer triggering transition"); // Debug log
+            hasReachedLimitRef.current = true;
+            setIsTransitioning(true);
+            onReachLimit(); // This should trigger the snap scroll
+          }
+        }, 1000);
+      }
+    }
 
     // Only apply rotation in valid range
     if (
@@ -135,22 +187,38 @@ const VinylSpinner = () => {
     );
 
     // Update target scale based on direction and device type
-    const scaleFactor = isMobileRef.current ? 0.0035 : 0.003; // Higher sensitivity for mobile
-    // console.log(
-    //   "Using scale factor:",
-    //   scaleFactor,
-    //   "for",
-    //   isMobileRef.current ? "mobile" : "desktop"
-    // );
+    const scaleFactor = isMobileRef.current ? 0.0035 : 0.003;
     const scaleDelta = -deltaY * scaleFactor;
 
-    // Limit the scale based on device type
-    const minScale = isMobileRef.current ? 1.5 : 2; // Lower min scale for mobile
-    // console.log("Using min scale:", minScale);
-    targetScaleRef.current = Math.max(
-      minScale,
-      Math.min(6, targetScaleRef.current + scaleDelta)
-    );
+    // Calculate the new target scale (we'll still use scaling animation)
+    const newTargetScale = targetScaleRef.current + scaleDelta;
+
+    // Check if we should trigger the transition
+    if (
+      maxRotationReachedRef.current &&
+      deltaY > 0 &&
+      !hasReachedLimitRef.current &&
+      (animationCompleteRef.current || Math.abs(rotation - MAX_ROTATION) < 1)
+    ) {
+      hasReachedLimitRef.current = true;
+      setIsTransitioning(true); // Prevent further scrolling
+
+      // Clear fail-safe timer if it was set
+      if (failSafeTimerRef.current) {
+        clearTimeout(failSafeTimerRef.current);
+      }
+
+      // Modify the transition to properly reset overflow before scrolling
+      transitionTimeoutRef.current = window.setTimeout(() => {
+        console.log("Triggering onReachLimit transition");
+        // Explicitly reset overflow to allow scrolling before transition
+        document.body.style.overflow = "auto";
+        onReachLimit(); // This triggers the snap scroll to the next section
+      }, 0);
+    }
+
+    // Limit the scale (still apply scaling for visual effect)
+    targetScaleRef.current = Math.max(MIN_SCALE, Math.min(6, newTargetScale));
   };
 
   // Use wheel events for desktop and touch events for mobile
@@ -231,12 +299,24 @@ const VinylSpinner = () => {
         <div>
           Limits: {MIN_ROTATION}° to {MAX_ROTATION}°
         </div>
+        <div>
+          Max Rotation Reached: {maxRotationReachedRef.current ? "Yes" : "No"}
+        </div>
+        <div>
+          Animation Complete: {animationCompleteRef.current ? "Yes" : "No"}
+        </div>
+        <div>Transitioning: {isTransitioning ? "Yes" : "No"}</div>
       </div>
 
+      {/* Add instructions for users */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white text-center">
+        <p className="text-lg">Scroll down to continue</p>
+        <div className="mt-2 animate-bounce">↓</div>
+      </div>
+
+      {/* Record container - same as before */}
       <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
-        {/* Record container with both inner and outer parts */}
         <div className="relative w-full h-full">
-          {/* Outer record (non-spinning part) - scales but doesn't rotate */}
           <motion.div
             className="absolute inset-0 w-full h-full"
             animate={outerControls}
@@ -250,7 +330,6 @@ const VinylSpinner = () => {
             />
           </motion.div>
 
-          {/* Inner record (spinning part) - both scales and rotates */}
           <motion.div
             className="absolute inset-0 w-full h-full"
             animate={controls}

@@ -28,7 +28,9 @@ body {
   font-family: "New Science", sans-serif;
   background-color: #f9f9f9;
   color: white;
-  overflow: hidden; /* Prevent default scrolling */
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: auto;
 }
 
 h1 {
