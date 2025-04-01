@@ -32,7 +32,7 @@ const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
   const MAX_ROTATION = 360;
 
   // Define scale limits, but we won't use them for transition anymore
-  const MIN_SCALE = isMobile ? 1.5 : 2;
+  // const MIN_SCALE = isMobile ? 1.5 : 2;
 
   // Add a ref to track mobile status
   const isMobileRef = useRef(false);
@@ -191,7 +191,7 @@ const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
     const scaleDelta = -deltaY * scaleFactor;
 
     // Calculate the new target scale (we'll still use scaling animation)
-    const newTargetScale = targetScaleRef.current + scaleDelta;
+    // const newTargetScale = targetScaleRef.current + scaleDelta;
 
     // Check if we should trigger the transition
     if (
