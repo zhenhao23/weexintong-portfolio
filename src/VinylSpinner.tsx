@@ -217,8 +217,13 @@ const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
       }, 0);
     }
 
+    const minScale = isMobileRef.current ? 1.5 : 2; // Lower min scale for mobile
+
     // Limit the scale (still apply scaling for visual effect)
-    targetScaleRef.current = Math.max(MIN_SCALE, Math.min(6, newTargetScale));
+    targetScaleRef.current = Math.max(
+      minScale,
+      Math.min(6, targetScaleRef.current + scaleDelta)
+    );
   };
 
   // Use wheel events for desktop and touch events for mobile
