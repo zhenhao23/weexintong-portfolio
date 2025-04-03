@@ -3,54 +3,69 @@ import VinylSpinner from "./VinylSpinner";
 import ScrollTriggerCircularCards from "./ScrollTriggerCircularCards";
 
 function App() {
-  // State to track which view is active
   const [currentView, setCurrentView] = useState<"vinyl" | "cards">("vinyl");
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const cardsRef = useRef<HTMLDivElement>(null);
+  const transitionRef = useRef<HTMLDivElement>(null);
 
-  // Function to transition to the cards view
   const transitionToCards = () => {
     console.log("transitionToCards called");
-    setCurrentView("cards");
+    setIsTransitioning(true);
 
-    // Use setTimeout to ensure state update completes before scrolling
+    // Start the transition animation
+    if (transitionRef.current) {
+      transitionRef.current.classList.add("transition-active");
+    }
+
+    // After animation starts, update view
     setTimeout(() => {
-      console.log("Attempting to scroll to cards section");
+      setCurrentView("cards");
 
-      // Try multiple approaches to ensure scrolling works
-      if (cardsRef.current) {
-        console.log("Cards ref exists, scrolling into view");
-        cardsRef.current.scrollIntoView({ behavior: "smooth" });
-      } else {
-        console.log("Cards ref not found, using window.scrollTo");
-        window.scrollTo({
-          top: window.innerHeight,
-          behavior: "smooth",
-        });
-      }
-    }, 100);
+      // After view updates, scroll to cards
+      setTimeout(() => {
+        if (cardsRef.current) {
+          cardsRef.current.scrollIntoView({ behavior: "smooth" });
+        } else {
+          window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
+        }
+
+        // End transition after everything is in place
+        setTimeout(() => {
+          setIsTransitioning(false);
+          if (transitionRef.current) {
+            transitionRef.current.classList.remove("transition-active");
+          }
+        }, 500);
+      }, 100);
+    }, 500);
   };
 
-  // Debug - log when ref changes
   useEffect(() => {
     console.log("Cards ref:", cardsRef.current);
   }, [cardsRef.current]);
 
   return (
     <div className="text-white h-screen overflow-y-auto">
+      {/* Radial transition overlay */}
+      <div
+        ref={transitionRef}
+        className="fixed inset-0 z-50 pointer-events-none transition-radial"
+      ></div>
+
       {/* Main content container */}
       <div className="relative w-full">
-        {/* Vinyl spinner section - always render but conditionally show/hide */}
+        {/* Vinyl spinner section */}
         <div
           className={`${
-            currentView === "cards"
+            currentView === "cards" || isTransitioning
               ? "pointer-events-none opacity-0"
               : "opacity-100"
-          } h-screen w-full transition-opacity duration-500`}
+          } h-screen w-full transition-opacity duration-500 absolute inset-0`}
         >
           <VinylSpinner onReachLimit={transitionToCards} />
         </div>
 
-        {/* Cards section - positioned below the first viewport */}
+        {/* Cards section */}
         <div
           ref={cardsRef}
           id="cards-section"
