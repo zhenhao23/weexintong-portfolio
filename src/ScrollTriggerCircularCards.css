@@ -65,10 +65,34 @@ h1 {
   top: 0;
   left: 0;
   width: 16%;
-  max-width: 300px;
   /* aspect-ratio: 16 / 10; */
   cursor: pointer;
   border-radius: 8px;
+}
+
+.card-0 {
+  max-width: 400px;
+}
+.card-1 {
+  max-width: 300px;
+}
+.card-2 {
+  max-width: 300px;
+}
+.card-3 {
+  max-width: 400px;
+}
+.card-4 {
+  max-width: 300px;
+}
+.card-5 {
+  max-width: 400px;
+}
+.card-6 {
+  max-width: 250px;
+}
+.card-7 {
+  max-width: 250px;
 }
 
 img {
@@ -138,8 +162,6 @@ img {
     255,
     0.2
   ); /* Light semi-transparent background */
-  backdrop-filter: blur(20px); /* Creates frosted glass effect */
-  -webkit-backdrop-filter: blur(20px); /* For Safari */
   border-radius: 8px;
   overflow: hidden;
   padding-bottom: 4px;
@@ -149,7 +171,18 @@ img {
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle light border */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  /* Enhanced box shadow with multiple layers for depth */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  /* Add a subtle transition for hover effects */
+  transition: box-shadow 0.3s ease;
+}
+
+/* Add a hover effect to make cards more interactive */
+.wheel__card:hover .card-container {
+  /* transform: translateY(-5px); */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
 }
 
 /* Update other text elements to use the new font */
@@ -185,7 +218,31 @@ img {
 
   .wheel__card {
     width: 40%; /* Larger cards on tablet */
-    max-width: 400px;
+  }
+
+  .card-0 {
+    max-width: 420px;
+  }
+  .card-1 {
+    max-width: 420px;
+  }
+  .card-2 {
+    max-width: 420px;
+  }
+  .card-3 {
+    max-width: 420px;
+  }
+  .card-4 {
+    max-width: 420px;
+  }
+  .card-5 {
+    max-width: 420px;
+  }
+  .card-6 {
+    max-width: 360px;
+  }
+  .card-7 {
+    max-width: 360px;
   }
 
   h1 {
@@ -208,7 +265,31 @@ img {
 
   .wheel__card {
     width: 40%; /* Larger cards on mobile */
-    max-width: 240px;
+  }
+
+  .card-0 {
+    max-width: 320px;
+  }
+  .card-1 {
+    max-width: 320px;
+  }
+  .card-2 {
+    max-width: 320px;
+  }
+  .card-3 {
+    max-width: 320px;
+  }
+  .card-4 {
+    max-width: 320px;
+  }
+  .card-5 {
+    max-width: 320px;
+  }
+  .card-6 {
+    max-width: 260px;
+  }
+  .card-7 {
+    max-width: 260px;
   }
 
   .card-title {

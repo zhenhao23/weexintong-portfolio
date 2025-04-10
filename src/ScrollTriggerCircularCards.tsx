@@ -5,15 +5,14 @@ import "./ScrollTriggerCircularCards.css";
 
 // Import your portfolio images
 // You can replace the placeholders with actual imports later
-import photo1 from "./assets/portfolio pics/DWMU1.png";
-import photo2 from "./assets/portfolio pics/DWMU2.png";
+import photo1 from "./assets/portfolio pics/street1.jpg";
+import photo2 from "./assets/portfolio pics/street3.jpg";
 import photo3 from "./assets/portfolio pics/fashion1.jpg";
-import photo4 from "./assets/portfolio pics/fashion2.jpg";
-import photo5 from "./assets/portfolio pics/FK.png";
-import photo6 from "./assets/portfolio pics/profile pic.jpg";
-import photo7 from "./assets/portfolio pics/street1.jpg";
-import photo8 from "./assets/portfolio pics/street2.jpg";
-import photo9 from "./assets/portfolio pics/street3.jpg";
+import photo4 from "./assets/portfolio pics/fashion3.jpg";
+import profile from "./assets/portfolio pics/profile pic.jpg";
+import gif1 from "./assets/postfolio gif/DWMU GIF (1).gif";
+import gif2 from "./assets/postfolio gif/FK GIF (1).gif";
+import gif3 from "./assets/postfolio gif/PL GIF (1).gif";
 
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -30,24 +29,35 @@ const ScrollTriggerCircularCards = () => {
 
   // Create an array with all portfolio images, duplicated to get 18 items
   const portfolioImages = [
+    gif3,
     photo1,
     photo2,
+    gif1,
+    profile,
+    gif2,
     photo3,
     photo4,
-    photo5,
-    photo6,
-    photo7,
-    photo8,
-    photo9,
+
+    gif3,
     photo1,
     photo2,
+    gif1,
+    profile,
+    gif2,
     photo3,
     photo4,
-    photo5,
-    photo6,
-    photo7,
-    photo8,
-    photo9,
+  ];
+
+  // Add an array of project titles
+  const projectTitles = [
+    "Pukul Lima",
+    "Street Photography",
+    "Urban Capture",
+    "Finders Keepers",
+    "Me",
+    "Don’t Wake Me Up ",
+    "Fashion Photography",
+    "Studio Photography",
   ];
 
   useEffect(() => {
@@ -144,6 +154,8 @@ const ScrollTriggerCircularCards = () => {
           opacity *= horizontalFactor;
         }
 
+        // In the updateOpacity function, change the backdrop filter application:
+
         // Fix: Apply styles directly to the element instead of using GSAP for backdrop-filter
         if (opacity > 0) {
           gsap.set(card, {
@@ -151,7 +163,7 @@ const ScrollTriggerCircularCards = () => {
             visibility: "visible",
           });
 
-          // Apply backdrop-filter directly to the element
+          // Apply backdrop-filter to the card itself instead of the container
           card.style.backdropFilter = "blur(20px)";
           if (isSafari) {
             // Use type assertion to bypass TypeScript's type checking for the vendor prefix
@@ -391,18 +403,19 @@ const ScrollTriggerCircularCards = () => {
       <div className="header"></div>
       <section className="slider-section">
         <div className="wheel" ref={wheelRef}>
-          {[...Array(18)].map((_, i) => {
+          {[...Array(16)].map((_, i) => {
             // Reverse the index to affect render order (and thus z-index)
-            const index = 17 - i;
-            // Get the title based on the original image (mod 9)
-            const titleIndex = (index % 9) + 1;
+            const index = 15 - i;
+            // Get the title based on the original image (mod 8)
+            const titleIndex = index % 8;
             return (
-              <div className="wheel__card" key={index}>
+              // In your rendering code, add unique classes:
+              <div className={`wheel__card card-${index % 8}`} key={index}>
                 <div className="card-container">
-                  <h3 className="card-title">Project {titleIndex}</h3>
+                  <h3 className="card-title">{projectTitles[titleIndex]}</h3>
                   <img
-                    src={portfolioImages[index % 18]}
-                    alt={`Portfolio ${titleIndex}`}
+                    src={portfolioImages[index % 16]}
+                    alt={`${projectTitles[titleIndex]}`}
                   />
                 </div>
               </div>
