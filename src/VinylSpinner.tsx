@@ -9,7 +9,7 @@ interface VinylSpinnerProps {
 }
 
 const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
-  const [rotation, setRotation] = useState(-40);
+  const [rotation, setRotation] = useState(0);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scale, setScale] = useState(6);
   const controls = useAnimationControls();
@@ -26,6 +26,12 @@ const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const transitionTimeoutRef = useRef<number | null>(null);
   const animationCompleteRef = useRef(false);
+
+  useEffect(() => {
+    // Immediately set the initial position
+    controls.set({ rotate: rotation, scale });
+    outerControls.set({ scale });
+  }, [controls, outerControls, rotation, scale]);
 
   // Define rotation limits
   const MIN_ROTATION = -40;

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./ScrollTriggerCircularCards.css";
+import LazyImage from "./LazyImage"; // Import the LazyImage component
 
 // Import your portfolio images
 // You can replace the placeholders with actual imports later
@@ -413,7 +414,7 @@ const ScrollTriggerCircularCards = () => {
               <div className={`wheel__card card-${index % 8}`} key={index}>
                 <div className="card-container">
                   <h3 className="card-title">{projectTitles[titleIndex]}</h3>
-                  <img
+                  <LazyImage
                     src={portfolioImages[index % 16]}
                     alt={`${projectTitles[titleIndex]}`}
                   />
