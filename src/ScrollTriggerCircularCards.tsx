@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./ScrollTriggerCircularCards.css";
-import LazyImage from "./LazyImage"; // Import the LazyImage component
+// import LazyImage from "./LazyImage"; // Import the LazyImage component
+import { motion, AnimatePresence } from "framer-motion";
 
 // Import your portfolio images
 // You can replace the placeholders with actual imports later
@@ -21,12 +22,24 @@ gsap.registerPlugin(ScrollTrigger);
 // Add this line to detect Safari browser
 const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-const ScrollTriggerCircularCards = () => {
+// Define props type for the component
+interface ScrollTriggerCircularCardsProps {
+  onCardClick?: (projectPath: string) => void;
+}
+
+const ScrollTriggerCircularCards = ({
+  onCardClick,
+}: ScrollTriggerCircularCardsProps) => {
   const wheelRef = useRef<HTMLDivElement>(null);
   const rotationAngleRef = useRef(0);
   const animationRef = useRef<gsap.core.Tween | null>(null);
   const velocityRef = useRef<number>(0);
   const lastTimeRef = useRef<number>(0);
+  const isClickingRef = useRef<boolean>(false);
+  const clickStartTimeRef = useRef<number>(0);
+  const [isContactExpanded, setIsContactExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const bubbleRef = useRef<HTMLDivElement>(null);
 
   // Create an array with all portfolio images, duplicated to get 18 items
   const portfolioImages = [
@@ -49,31 +62,98 @@ const ScrollTriggerCircularCards = () => {
     photo4,
   ];
 
-  // Add an array of project titles
-  const projectTitles = [
-    "Pukul Lima",
-    "Street Photography",
-    "Urban Capture",
-    "Finders Keepers",
-    "Me",
-    "Don’t Wake Me Up ",
-    "Fashion Photography",
-    "Studio Photography",
+  // Add an array of project titles and corresponding paths
+  const projects = [
+    { title: "Pukul Lima", path: "pukul-lima" },
+    { title: "Street Photography", path: "street-photography" },
+    { title: "Urban Capture", path: "urban-capture" },
+    { title: "Finders Keepers", path: "finders-keepers" },
+    { title: "Me", path: "profile" },
+    { title: "Don't Wake Me Up", path: "dont-wake-me-up" },
+    { title: "Fashion Photography", path: "fashion-photography" },
+    { title: "Studio Photography", path: "studio-photography" },
   ];
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 768); // Common breakpoint for mobile
+    };
+
+    // Initial check
+    checkIfMobile();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", checkIfMobile);
+
+    // Clean up
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
+
+  // Animation variants
+  const bubbleVariants = {
+    collapsed: {
+      height: isMobile ? "40px" : "25px",
+      transition: {
+        duration: 0.4,
+        ease: "easeInOut",
+      },
+    },
+    expanded: {
+      height: isMobile ? "110px" : "94px", // Adjust these values based on your content
+      transition: {
+        duration: 0.8,
+        ease: "easeInOut",
+      },
+    },
+  };
+
+  // Handle mouse events with a delay to prevent flickering (for desktop)
+  const handleMouseEnter = () => {
+    if (!isMobile) {
+      setIsContactExpanded(true);
+    }
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent) => {
+    // Only apply hover behavior on desktop
+    if (!isMobile) {
+      // Check if the mouse is truly leaving the entire bubble
+      if (
+        bubbleRef.current &&
+        !bubbleRef.current.contains(e.relatedTarget as Node)
+      ) {
+        setIsContactExpanded(false);
+      }
+    }
+  };
+
+  // Handle click for mobile devices
+  const handleBubbleClick = () => {
+    if (isMobile) {
+      setIsContactExpanded((prev) => !prev);
+    }
+  };
+
+  // Handler for card click
+  const handleCardClick = (projectPath: string) => {
+    // Only navigate if this was a genuine click (not just ending a scroll)
+    if (
+      isClickingRef.current &&
+      performance.now() - clickStartTimeRef.current < 300
+    ) {
+      if (onCardClick) {
+        onCardClick(projectPath);
+      }
+    }
+    isClickingRef.current = false;
+  };
 
   useEffect(() => {
     // Get all card elements
     const wheel = wheelRef.current;
     const cards = gsap.utils.toArray<HTMLElement>(".wheel__card");
     const totalCards = cards.length;
-
-    // Arrow animation
-    // gsap.to(".arrow", {
-    //   y: 5,
-    //   ease: "power1.inOut",
-    //   repeat: -1,
-    //   yoyo: true,
-    // });
 
     // Function to update card positions based on current rotation angle
     const updateCardPositions = (currentAngle = 0) => {
@@ -184,6 +264,14 @@ const ScrollTriggerCircularCards = () => {
     // Add resize event listener
     const handleResize = () => updateCardPositions(rotationAngleRef.current);
     window.addEventListener("resize", handleResize);
+
+    // Add mouse events for clicking cards
+    const handleMouseDown = () => {
+      isClickingRef.current = true;
+      clickStartTimeRef.current = performance.now();
+    };
+
+    window.addEventListener("mousedown", handleMouseDown);
 
     // Handle wheel event for moving cards along path
     const handleWheel = (e: WheelEvent) => {
@@ -390,6 +478,7 @@ const ScrollTriggerCircularCards = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("touchend", handleTouchEnd);
@@ -409,21 +498,72 @@ const ScrollTriggerCircularCards = () => {
             const index = 15 - i;
             // Get the title based on the original image (mod 8)
             const titleIndex = index % 8;
+            const project = projects[titleIndex];
+
             return (
-              // In your rendering code, add unique classes:
-              <div className={`wheel__card card-${index % 8}`} key={index}>
+              <div
+                className={`wheel__card card-${index % 8}`}
+                key={index}
+                onClick={() => handleCardClick(project.path)}
+              >
                 <div className="card-container">
-                  <h3 className="card-title">{projectTitles[titleIndex]}</h3>
-                  <LazyImage
-                    src={portfolioImages[index % 16]}
-                    alt={`${projectTitles[titleIndex]}`}
-                  />
+                  <h3 className="card-title">{project.title}</h3>
+                  <img src={portfolioImages[index % 16]} alt={project.title} />
                 </div>
               </div>
             );
           })}
         </div>
       </section>
+      <motion.div
+        ref={bubbleRef}
+        className={`contact-bubble ${isContactExpanded ? "expanded" : ""}`}
+        variants={bubbleVariants}
+        initial="collapsed"
+        animate={isContactExpanded ? "expanded" : "collapsed"}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleBubbleClick}
+      >
+        <h3 className="contact-title">Let's talk</h3>
+        <AnimatePresence>
+          <motion.div
+            className="contact-content"
+            // variants={contentVariants}
+            initial="collapsed"
+            animate={isContactExpanded ? "expanded" : "collapsed"}
+          >
+            <p className="contact-email">wxintong.work@gmail.com</p>
+            <div className="social-links">
+              <a
+                href="https://instagram.com/username"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Instagram
+              </a>
+              <a
+                href="https://linkedin.com/in/username"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LinkedIn
+              </a>
+              <a
+                href="https://medium.com/@username"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Medium
+              </a>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </motion.div>
+      <div className="corner-text top-left">Midpovs</div>
+      <div className="corner-text top-right">Filmmaker</div>
+      <div className="corner-text bottom-right">Director</div>
+      <div className="corner-text bottom-left">Videographer</div>
 
       {/* <div className="scroll-down">
         Scroll down

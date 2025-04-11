@@ -339,7 +339,7 @@ const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
       </div>
 
       {/* Add instructions for users */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 text-white text-center z-20 mb-4 md:mb-0 md:bottom-8 bottom-16">
+      <div className="absolute left-1/2 transform -translate-x-1/2 text-white text-center z-20 mb-4 md:mb-0 md:bottom-2 bottom-16">
         <p className="text-lg">
           {isMobile ? "Swipe up to continue" : "Scroll down to continue"}
         </p>

@@ -189,11 +189,11 @@ img {
 .card-title {
   position: relative;
   width: 100%;
-  margin: 0;
-  padding: 2px 0;
+  margin: 0 !important;
+  padding: 2px 0 !important;
   text-align: center;
   color: rgba(255, 255, 255, 0.85); /* Light color for better visibility */
-  font-size: 0.6rem;
+  font-size: 0.6rem !important;
   font-weight: 500;
   font-family: "New Science", sans-serif;
   z-index: 10;
