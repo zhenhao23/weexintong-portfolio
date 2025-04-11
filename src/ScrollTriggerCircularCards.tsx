@@ -67,9 +67,9 @@ const ScrollTriggerCircularCards = ({
     { title: "Pukul Lima", path: "pukul-lima" },
     { title: "Street Photography", path: "street-photography" },
     { title: "Urban Capture", path: "urban-capture" },
-    { title: "Finders Keepers", path: "finders-keepers" },
-    { title: "Me", path: "profile" },
     { title: "Don't Wake Me Up", path: "dont-wake-me-up" },
+    { title: "Me", path: "profile" },
+    { title: "Finders Keepers", path: "finders-keepers" },
     { title: "Fashion Photography", path: "fashion-photography" },
     { title: "Studio Photography", path: "studio-photography" },
   ];
