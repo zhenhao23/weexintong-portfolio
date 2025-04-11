@@ -9,7 +9,7 @@ interface VinylSpinnerProps {
 }
 
 const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
-  const [rotation, setRotation] = useState(0);
+  const [rotation, setRotation] = useState(-40);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scale, setScale] = useState(6);
   const controls = useAnimationControls();
@@ -27,12 +27,6 @@ const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
   const transitionTimeoutRef = useRef<number | null>(null);
   const animationCompleteRef = useRef(false);
 
-  useEffect(() => {
-    // Immediately set the initial position
-    controls.set({ rotate: rotation, scale });
-    outerControls.set({ scale });
-  }, [controls, outerControls, rotation, scale]);
-
   // Define rotation limits
   const MIN_ROTATION = -40;
   const MAX_ROTATION = 360;
@@ -42,6 +36,31 @@ const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
 
   // Add a ref to track mobile status
   const isMobileRef = useRef(false);
+
+  // Add this effect after your other useEffect hooks
+
+  // Force initial positioning
+  useEffect(() => {
+    // Force an initial update to ensure correct positioning
+    controls.set({
+      rotate: targetRotationRef.current,
+      scale: targetScaleRef.current,
+    });
+
+    outerControls.set({
+      scale: targetScaleRef.current,
+    });
+
+    // Slight delay to ensure everything renders properly
+    const timer = setTimeout(() => {
+      controls.set({
+        rotate: targetRotationRef.current,
+        scale: targetScaleRef.current,
+      });
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, [controls, outerControls]);
 
   // Check for mobile device on component mount and window resize
   useEffect(() => {
@@ -320,16 +339,16 @@ const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
       </div>
 
       {/* Add instructions for users */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white text-center">
+      <div className="absolute left-1/2 transform -translate-x-1/2 text-white text-center z-20 mb-4 md:mb-0 md:bottom-8 bottom-16">
         <p className="text-lg">Scroll down to continue</p>
         <div className="mt-2 animate-bounce">↓</div>
       </div>
 
       {/* Record container - same as before */}
       <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
-        <div className="relative w-full h-full">
+        <div className="relative w-full h-full flex items-center justify-center">
           <motion.div
-            className="absolute inset-0 w-full h-full"
+            className="absolute inset-0 flex items-center justify-center"
             animate={outerControls}
             initial={{ scale: 6 }}
             transition={{ type: "tween", duration: 0.01 }}
@@ -337,12 +356,13 @@ const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
             <img
               src={recordOuter}
               alt="Vinyl Record Outer"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain origin-center"
+              style={{ transformOrigin: "center" }}
             />
           </motion.div>
 
           <motion.div
-            className="absolute inset-0 w-full h-full"
+            className="absolute inset-0 flex items-center justify-center"
             animate={controls}
             initial={{ rotate: -40, scale: 6 }}
             transition={{ type: "tween", duration: 0.01 }}
@@ -350,7 +370,8 @@ const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
             <img
               src={recordInner}
               alt="Vinyl Record Inner"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain origin-center"
+              style={{ transformOrigin: "center" }}
             />
           </motion.div>
         </div>
