@@ -113,7 +113,8 @@ const ScrollTriggerCircularCards = ({
   };
 
   // Handle touch events for cards
-  const handleCardTouchStart = (e: React.TouchEvent, projectPath: string) => {
+  // const handleCardTouchStart = (e: React.TouchEvent, projectPath: string) => {
+  const handleCardTouchStart = (e: React.TouchEvent) => {
     // Record start position and time
     touchStartXRef.current = e.touches[0].clientX;
     touchStartYRef.current = e.touches[0].clientY;
@@ -559,7 +560,7 @@ const ScrollTriggerCircularCards = ({
                 className={`wheel__card card-${index % 8}`}
                 key={index}
                 onClick={() => handleCardClick(project.path)}
-                onTouchStart={(e) => handleCardTouchStart(e, project.path)}
+                onTouchStart={(e) => handleCardTouchStart(e)}
                 onTouchEnd={(e) => handleCardTouchEnd(e, project.path)}
               >
                 <div className="card-container">
