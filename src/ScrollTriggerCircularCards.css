@@ -9,7 +9,7 @@
 }
 
 @font-face {
-  font-family: "New Science";
+  font-family: "New Science Medium";
   src: url("./assets/fonts/fonnts.com-New_Science_Medium.otf")
       format("opentype"),
     url("./assets/fonts/fonnts.com-New_Science_Medium_Extended.otf")
@@ -25,7 +25,7 @@ body {
   margin: 0;
   /* Remove the fixed height: height: 600vh; */
   width: 100vw;
-  font-family: "New Science", sans-serif;
+  font-family: "New Science Medium", sans-serif;
   background-color: #f9f9f9;
   color: white;
   overflow-x: hidden;
@@ -34,7 +34,7 @@ body {
 }
 
 h1 {
-  font-family: "New Science", sans-serif;
+  font-family: "New Science Medium", sans-serif;
   font-size: 10vw;
   font-weight: 500;
 }
@@ -135,7 +135,7 @@ img {
   transform: translate(-50%, 0);
   color: white;
   font-weight: 500;
-  font-family: "New Science", sans-serif;
+  font-family: "New Science Medium", sans-serif;
   text-transform: uppercase;
   font-size: 14px;
   overflow: visible;
@@ -195,7 +195,7 @@ img {
   color: rgba(255, 255, 255, 0.85); /* Light color for better visibility */
   font-size: 0.6rem !important;
   font-weight: 500;
-  font-family: "New Science", sans-serif;
+  font-family: "New Science Medium", sans-serif;
   z-index: 10;
 }
 
@@ -204,6 +204,11 @@ img {
   height: 100%; /* Changed from 100% */
   object-fit: cover;
   flex-grow: 1; /* Allow the image to fill available space */
+}
+
+.contact-bubble {
+  z-index: 1000; /* Make sure this is higher than other elements */
+  /* your other styles */
 }
 
 /* ...existing code... */

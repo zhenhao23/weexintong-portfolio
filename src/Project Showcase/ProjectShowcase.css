@@ -2,9 +2,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
 
 @font-face {
-  font-family: "New Science";
-  src: url("./assets/fonts/fonnts.com-New_Science_Light.otf") format("opentype"),
-    url("./assets/fonts/fonnts.com-New_Science_Light_Extended.otf")
+  font-family: "New Science Light";
+  src: url("../assets/fonts/fonnts.com-New_Science_Light.otf")
+      format("opentype"),
+    url("../assets/fonts/fonnts.com-New_Science_Light_Extended.otf")
       format("opentype");
   font-weight: 500;
   font-style: normal;
@@ -13,9 +14,9 @@
 
 @font-face {
   font-family: "New Science Regular";
-  src: url("./assets/fonts/fonnts.com-New_Science_Regular.otf")
+  src: url("../assets/fonts/fonnts.com-New_Science_Regular.otf")
       format("opentype"),
-    url("./assets/fonts/fonnts.com-New_Science_Regular_Extended.otf")
+    url("../assets/fonts/fonnts.com-New_Science_Regular_Extended.otf")
       format("opentype");
   font-weight: 500;
   font-style: normal;
@@ -97,7 +98,7 @@
 
 .nav-button {
   color: #7e7e7e;
-  font-family: "New Science", sans-serif;
+  font-family: "New Science Light", sans-serif;
   letter-spacing: 0.5px;
   cursor: pointer;
   user-select: none;
@@ -121,7 +122,7 @@
   color: #7e7e7e; /* Light color for better visibility */
   font-size: 1.5rem;
   font-weight: 500;
-  font-family: "New Science", sans-serif;
+  font-family: "New Science Light", sans-serif;
   z-index: 10;
 }
 
@@ -252,7 +253,7 @@
 
 .contact-title {
   color: #7e7e7e;
-  font-family: "New Science", sans-serif;
+  font-family: "New Science Light", sans-serif;
   letter-spacing: 0.5px;
   font-size: 12px;
   margin: 0;
@@ -307,7 +308,7 @@
 
 .corner-text {
   position: absolute;
-  font-family: "New Science", sans-serif;
+  font-family: "New Science Light", sans-serif;
   letter-spacing: 0.5px;
   font-size: 12px;
   color: #7e7e7e;
@@ -354,7 +355,7 @@
     right: 0;
     transform: none; /* Remove transform since we're using full width */
     border-radius: 8px 8px 0 0;
-    padding: 10px 20px;
+    padding: 10px 20px 20px;
     min-width: unset; /* Remove min-width on mobile */
   }
 

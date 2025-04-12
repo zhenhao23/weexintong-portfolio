@@ -69,13 +69,13 @@ const ScrollTriggerCircularCards = ({
   // Add an array of project titles and corresponding paths
   const projects = [
     { title: "Pukul Lima", path: "pukul-lima" },
-    { title: "Street Photography", path: "street-photography" },
-    { title: "Urban Capture", path: "urban-capture" },
+    { title: "Street Photography", path: "pukul-lima" },
+    { title: "Urban Capture", path: "pukul-lima" },
     { title: "Don't Wake Me Up", path: "dont-wake-me-up" },
-    { title: "Me", path: "profile" },
+    { title: "Me", path: "dont-wake-me-up" },
     { title: "Finders Keepers", path: "finders-keepers" },
-    { title: "Fashion Photography", path: "fashion-photography" },
-    { title: "Studio Photography", path: "studio-photography" },
+    { title: "Fashion Photography", path: "finders-keepers" },
+    { title: "Studio Photography", path: "finders-keepers" },
   ];
 
   // Check if device is mobile
@@ -97,7 +97,7 @@ const ScrollTriggerCircularCards = ({
   // Animation variants
   const bubbleVariants = {
     collapsed: {
-      height: isMobile ? "40px" : "25px",
+      height: isMobile ? "50px" : "25px",
       transition: {
         duration: 0.4,
         ease: "easeInOut",
@@ -173,11 +173,27 @@ const ScrollTriggerCircularCards = ({
     }
   };
 
-  // Handle click for mobile devices
-  const handleBubbleClick = () => {
-    if (isMobile) {
-      setIsContactExpanded((prev) => !prev);
-    }
+  const handleBubbleClick = (e: React.MouseEvent) => {
+    // Make sure the event doesn't propagate
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Force log to verify function is being called
+    console.log(
+      "Bubble clicked, mobile:",
+      isMobile,
+      "current state:",
+      isContactExpanded
+    );
+
+    // Force the toggle regardless of mobile status
+    setIsContactExpanded((prev) => !prev);
+  };
+
+  const handleBubbleTouchEnd = (e: React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsContactExpanded((prev) => !prev);
   };
 
   // Handler for card click
@@ -590,6 +606,7 @@ const ScrollTriggerCircularCards = ({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleBubbleClick}
+        onTouchEnd={handleBubbleTouchEnd} // Add this line
       >
         <h3 className="contact-title">Let's talk</h3>
         <AnimatePresence>

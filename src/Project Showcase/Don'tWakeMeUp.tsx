@@ -43,7 +43,7 @@ const DontWakeMeUp: React.FC = () => {
   // Animation variants
   const bubbleVariants = {
     collapsed: {
-      height: isMobile ? "40px" : "25px",
+      height: isMobile ? "50px" : "25px",
       transition: {
         duration: 0.4,
         ease: "easeInOut",
