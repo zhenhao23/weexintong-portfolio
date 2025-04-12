@@ -174,11 +174,15 @@ const ScrollTriggerCircularCards = ({
   };
 
   const handleBubbleClick = (e: React.MouseEvent) => {
-    // Make sure the event doesn't propagate
+    // Don't intercept clicks on links or their children
+    if ((e.target as HTMLElement).closest("a")) {
+      return; // Allow the link click to proceed normally
+    }
+
+    // Make sure the event doesn't propagate for non-link clicks
     e.preventDefault();
     e.stopPropagation();
 
-    // Force log to verify function is being called
     console.log(
       "Bubble clicked, mobile:",
       isMobile,
@@ -191,6 +195,18 @@ const ScrollTriggerCircularCards = ({
   };
 
   const handleBubbleTouchEnd = (e: React.TouchEvent) => {
+    // Get the actual target element that was touched
+    const target = e.target as HTMLElement;
+
+    // Check if the touch is on a link or any of its children
+    const linkElement = target.closest("a");
+    if (linkElement) {
+      // For link elements, allow the default behavior (navigate to href)
+      // We don't need to do anything here - just let the event propagate
+      return;
+    }
+
+    // For non-link elements, prevent default and toggle the bubble
     e.preventDefault();
     e.stopPropagation();
     setIsContactExpanded((prev) => !prev);
@@ -606,7 +622,7 @@ const ScrollTriggerCircularCards = ({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleBubbleClick}
-        onTouchEnd={handleBubbleTouchEnd} // Add this line
+        onTouchEnd={handleBubbleTouchEnd}
       >
         <h3 className="contact-title">Let's talk</h3>
         <AnimatePresence>
@@ -616,12 +632,42 @@ const ScrollTriggerCircularCards = ({
             initial="collapsed"
             animate={isContactExpanded ? "expanded" : "collapsed"}
           >
-            <p className="contact-email">wxintong.work@gmail.com</p>
+            <a
+              href="mailto:wxintong.work@gmail.com"
+              className="contact-email"
+              onClick={(e) => {
+                e.stopPropagation();
+                // For mobile devices, explicitly handle the email link
+                if (isMobile) {
+                  window.location.href = "mailto:wxintong.work@gmail.com";
+                }
+              }}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                window.location.href = "mailto:wxintong.work@gmail.com";
+              }}
+            >
+              wxintong.work@gmail.com
+            </a>
             <div className="social-links">
               <a
                 href="https://www.instagram.com/midpovs"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // On mobile, directly navigate to the URL
+                  if (isMobile) {
+                    window.open("https://www.instagram.com/midpovs", "_blank");
+                  }
+                }}
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                  // Explicitly prevent the default touchend behavior and handle navigation manually
+                  e.preventDefault();
+                  window.open("https://www.instagram.com/midpovs", "_blank");
+                }}
               >
                 Instagram
               </a>
@@ -629,6 +675,23 @@ const ScrollTriggerCircularCards = ({
                 href="https://www.linkedin.com/in/weexintong"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (isMobile) {
+                    window.open(
+                      "https://www.linkedin.com/in/weexintong",
+                      "_blank"
+                    );
+                  }
+                }}
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  window.open(
+                    "https://www.linkedin.com/in/weexintong",
+                    "_blank"
+                  );
+                }}
               >
                 LinkedIn
               </a>
@@ -636,6 +699,17 @@ const ScrollTriggerCircularCards = ({
                 href="https://medium.com/@username"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (isMobile) {
+                    window.open("https://medium.com/@username", "_blank");
+                  }
+                }}
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  window.open("https://medium.com/@username", "_blank");
+                }}
               >
                 Medium
               </a>

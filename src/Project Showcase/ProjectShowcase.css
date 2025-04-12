@@ -278,6 +278,9 @@
   color: #7e7e7e;
   margin: 4px 0;
   text-align: center;
+  display: block;
+  width: 100%;
+  text-decoration: none;
 }
 
 .contact-email:hover {

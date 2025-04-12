@@ -151,17 +151,19 @@ const DontWakeMeUp: React.FC = () => {
             initial="collapsed"
             animate={isContactExpanded ? "expanded" : "collapsed"}
           >
-            <p className="contact-email">wxintong.work@gmail.com</p>
+            <a href="mailto:wxintong.work@gmail.com" className="contact-email">
+              wxintong.work@gmail.com
+            </a>
             <div className="social-links">
               <a
-                href="https://instagram.com/username"
+                href="https://www.instagram.com/midpovs"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Instagram
               </a>
               <a
-                href="https://linkedin.com/in/username"
+                href="https://www.linkedin.com/in/weexintong"
                 target="_blank"
                 rel="noopener noreferrer"
               >
