@@ -40,6 +40,10 @@ const ScrollTriggerCircularCards = ({
   const [isContactExpanded, setIsContactExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const bubbleRef = useRef<HTMLDivElement>(null);
+  // Track touch for distinguishing between scrolling and tapping
+  const touchStartXRef = useRef<number>(0);
+  const touchStartYRef = useRef<number>(0);
+  const touchTimeStartRef = useRef<number>(0);
 
   // Create an array with all portfolio images, duplicated to get 18 items
   const portfolioImages = [
@@ -106,6 +110,46 @@ const ScrollTriggerCircularCards = ({
         ease: "easeInOut",
       },
     },
+  };
+
+  // Handle touch events for cards
+  const handleCardTouchStart = (e: React.TouchEvent, projectPath: string) => {
+    // Record start position and time
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+    touchTimeStartRef.current = performance.now();
+    isClickingRef.current = true;
+    clickStartTimeRef.current = performance.now();
+    // Don't stop propagation - we still want scroll to work if user drags
+  };
+
+  const handleCardTouchEnd = (e: React.TouchEvent, projectPath: string) => {
+    // Calculate if this was a tap or a scroll
+    const touchEndTime = performance.now();
+    const touchDuration = touchEndTime - touchTimeStartRef.current;
+
+    // Get the last touch position
+    let touchEndX = touchStartXRef.current;
+    let touchEndY = touchStartYRef.current;
+
+    if (e.changedTouches && e.changedTouches.length > 0) {
+      touchEndX = e.changedTouches[0].clientX;
+      touchEndY = e.changedTouches[0].clientY;
+    }
+
+    // Calculate distance moved
+    const distX = Math.abs(touchEndX - touchStartXRef.current);
+    const distY = Math.abs(touchEndY - touchStartYRef.current);
+
+    // If touch was short and didn't move much, consider it a tap
+    if (touchDuration < 300 && distX < 10 && distY < 10) {
+      e.preventDefault(); // Prevent default only for taps
+      if (onCardClick) {
+        onCardClick(projectPath);
+      }
+    }
+
+    isClickingRef.current = false;
   };
 
   // Handle mouse events with a delay to prevent flickering (for desktop)
@@ -361,6 +405,11 @@ const ScrollTriggerCircularCards = ({
     let lastTouchTime = 0;
 
     const handleTouchStart = (e: TouchEvent) => {
+      // Skip if the target is a wheel__card element (let the card's own handler work)
+      if ((e.target as HTMLElement).closest(".wheel__card")) {
+        return;
+      }
+
       touchStartY = e.touches[0].clientY;
       lastTouchY = touchStartY;
       lastTouchTime = performance.now();
@@ -374,6 +423,11 @@ const ScrollTriggerCircularCards = ({
     };
 
     const handleTouchMove = (e: TouchEvent) => {
+      // Skip if the target is a wheel__card element (let the card's own handler work)
+      if ((e.target as HTMLElement).closest(".wheel__card")) {
+        return;
+      }
+
       e.preventDefault();
       const touchY = e.touches[0].clientY;
       const now = performance.now();
@@ -505,6 +559,8 @@ const ScrollTriggerCircularCards = ({
                 className={`wheel__card card-${index % 8}`}
                 key={index}
                 onClick={() => handleCardClick(project.path)}
+                onTouchStart={(e) => handleCardTouchStart(e, project.path)}
+                onTouchEnd={(e) => handleCardTouchEnd(e, project.path)}
               >
                 <div className="card-container">
                   <h3 className="card-title">{project.title}</h3>
