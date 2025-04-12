@@ -4,6 +4,8 @@ import ScrollTriggerCircularCards from "./ScrollTriggerCircularCards";
 import PukulLima from "./Project Showcase/PukulLima";
 import FindersKeepers from "./Project Showcase/FindersKeepers";
 import DontWakeMeUp from "./Project Showcase/Don'tWakeMeUp";
+// import CustomCursor from "./CustomCursor";
+// import "./App.css";
 import {
   BrowserRouter as Router,
   Routes,
@@ -83,6 +85,7 @@ function MainContent() {
 
   return (
     <div className="text-white h-screen overflow-y-auto">
+      {/* <CustomCursor /> */}
       {/* Radial transition overlay */}
       <div
         ref={transitionRef}
@@ -107,7 +110,9 @@ function MainContent() {
           ref={cardsRef}
           id="cards-section"
           className={`${
-            currentView === "vinyl" ? "opacity-0" : "opacity-100"
+            currentView === "vinyl"
+              ? "opacity-0 pointer-events-none"
+              : "opacity-100"
           } h-screen w-full transition-opacity duration-500`}
         >
           <ScrollTriggerCircularCards onCardClick={handleCardClick} />

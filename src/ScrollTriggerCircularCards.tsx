@@ -619,14 +619,14 @@ const ScrollTriggerCircularCards = ({
             <p className="contact-email">wxintong.work@gmail.com</p>
             <div className="social-links">
               <a
-                href="https://instagram.com/username"
+                href="https://www.instagram.com/midpovs"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Instagram
               </a>
               <a
-                href="https://linkedin.com/in/username"
+                href="https://www.linkedin.com/in/weexintong"
                 target="_blank"
                 rel="noopener noreferrer"
               >
