@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./ProjectShowcase.css";
 import plGif from "../assets/postfolio gif/PL GIF.gif"; // Import the GIF file
+import plGifMobile from "../assets/postfolio gif/PL GIF (1).gif"; // Import the smaller GIF file
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
@@ -114,7 +115,10 @@ const PukulLima: React.FC = () => {
             </div>
             <div className="content-container">
               <div className="gif-container">
-                <img src={plGif} alt="Pukul Lima Project" />
+                <img
+                  src={isMobile ? plGifMobile : plGif}
+                  alt="Pukul Lima Project"
+                />
               </div>
               <div className="nav-scroll-container">
                 <div className="project-nav">

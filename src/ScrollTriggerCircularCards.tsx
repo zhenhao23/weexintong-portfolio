@@ -115,13 +115,12 @@ const ScrollTriggerCircularCards = ({
   // Handle touch events for cards
   // const handleCardTouchStart = (e: React.TouchEvent, projectPath: string) => {
   const handleCardTouchStart = (e: React.TouchEvent) => {
-    // Record start position and time
+    // Don't stop propagation - let the event bubble up for wheel scrolling
     touchStartXRef.current = e.touches[0].clientX;
     touchStartYRef.current = e.touches[0].clientY;
     touchTimeStartRef.current = performance.now();
     isClickingRef.current = true;
     clickStartTimeRef.current = performance.now();
-    // Don't stop propagation - we still want scroll to work if user drags
   };
 
   const handleCardTouchEnd = (e: React.TouchEvent, projectPath: string) => {
@@ -144,7 +143,8 @@ const ScrollTriggerCircularCards = ({
 
     // If touch was short and didn't move much, consider it a tap
     if (touchDuration < 300 && distX < 10 && distY < 10) {
-      e.preventDefault(); // Prevent default only for taps
+      // Only prevent default when we're sure it's a tap, not a scroll attempt
+      e.preventDefault();
       if (onCardClick) {
         onCardClick(projectPath);
       }
@@ -406,10 +406,9 @@ const ScrollTriggerCircularCards = ({
     let lastTouchTime = 0;
 
     const handleTouchStart = (e: TouchEvent) => {
-      // Skip if the target is a wheel__card element (let the card's own handler work)
-      if ((e.target as HTMLElement).closest(".wheel__card")) {
-        return;
-      }
+      // Don't automatically skip card touches - instead track all touches
+      // but only prevent default for non-card elements
+      const isCardTouch = !!(e.target as HTMLElement).closest(".wheel__card");
 
       touchStartY = e.touches[0].clientY;
       lastTouchY = touchStartY;
@@ -420,85 +419,95 @@ const ScrollTriggerCircularCards = ({
         animationRef.current.kill();
       }
 
-      e.preventDefault();
+      // Only prevent default for non-card elements
+      if (!isCardTouch) {
+        e.preventDefault();
+      }
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      // Skip if the target is a wheel__card element (let the card's own handler work)
-      if ((e.target as HTMLElement).closest(".wheel__card")) {
-        return;
+      // For touch moves, we want to process ALL moves, even on cards
+      // but we need to be careful about preventing default
+      const isCardTouch = !!(e.target as HTMLElement).closest(".wheel__card");
+
+      // Only prevent default for non-card elements
+      // This allows card touch interactions (like scrolling) to work naturally
+      if (!isCardTouch) {
+        e.preventDefault();
       }
 
-      e.preventDefault();
       const touchY = e.touches[0].clientY;
       const now = performance.now();
       const elapsed = now - lastTouchTime;
 
-      // Calculate delta and velocity (similar to wheel handler)
+      // Calculate delta and velocity
       const deltaY = lastTouchY - touchY;
       const sensitivity = 0.003;
 
       // CHANGE: Reverse the sign of rawDelta to change rotation direction
-      const rawDelta = -deltaY * sensitivity; // Added negative sign here
+      const rawDelta = -deltaY * sensitivity;
 
       // Force a sign to the rawDelta to ensure direction is preserved
-      // CHANGE: Reverse the direction
-      const touchDirection = -Math.sign(deltaY); // Added negative sign here
+      const touchDirection = -Math.sign(deltaY);
 
-      // Rest of your code remains the same
-      if (elapsed > 0) {
-        // Apply smoother damping (same as wheel handler)
-        velocityRef.current =
-          0.85 * velocityRef.current + 0.15 * ((rawDelta / elapsed) * 16);
+      // Only update wheel position if the movement is significant
+      // This helps distinguish between attempts to tap vs attempts to scroll
+      if (Math.abs(deltaY) > 5) {
+        if (elapsed > 0) {
+          // Apply smoother damping (same as wheel handler)
+          velocityRef.current =
+            0.85 * velocityRef.current + 0.15 * ((rawDelta / elapsed) * 16);
 
-        // Ensure velocity has same sign as touch direction
-        if (
-          Math.sign(velocityRef.current) !== touchDirection &&
-          touchDirection !== 0
-        ) {
-          velocityRef.current = Math.abs(velocityRef.current) * touchDirection;
+          // Ensure velocity has same sign as touch direction
+          if (
+            Math.sign(velocityRef.current) !== touchDirection &&
+            touchDirection !== 0
+          ) {
+            velocityRef.current =
+              Math.abs(velocityRef.current) * touchDirection;
+          }
         }
-      }
 
-      lastTouchY = touchY;
-      lastTouchTime = now;
+        lastTouchY = touchY;
+        lastTouchTime = now;
 
-      // Cancel any existing animation
-      if (animationRef.current) {
-        animationRef.current.kill();
-      }
-
-      // For small movements, don't apply immediate jump,
-      // instead rely entirely on the animation
-      const minTouchVelocity = 0.01;
-
-      // Always use the original touch direction for small movements
-      if (Math.abs(velocityRef.current) < minTouchVelocity) {
-        velocityRef.current = touchDirection * minTouchVelocity;
-      }
-
-      // Instead of direct update, animate to target position smoothly - same as wheel handler
-      animationRef.current = gsap.to(
-        {},
-        {
-          duration: 1.5,
-          ease: "power1.out",
-          onUpdate: function () {
-            const progress = this.progress();
-            const decayFactor = 1 - Math.pow(progress, 0.7);
-
-            // Combined movement calculation with reduced decay
-            const momentumDelta = velocityRef.current * decayFactor * 0.5;
-
-            // Apply movement to rotation angle
-            rotationAngleRef.current += momentumDelta;
-            updateCardPositions(rotationAngleRef.current);
-          },
-          onComplete: function () {
-            velocityRef.current *= 0.3;
-          },
+        // Cancel any existing animation
+        if (animationRef.current) {
+          animationRef.current.kill();
         }
-      );
+
+        // For small movements, don't apply immediate jump,
+        // instead rely entirely on the animation
+        const minTouchVelocity = 0.01;
+
+        // Always use the original touch direction for small movements
+        if (Math.abs(velocityRef.current) < minTouchVelocity) {
+          velocityRef.current = touchDirection * minTouchVelocity;
+        }
+
+        // Start the animation to update the wheel position
+        animationRef.current = gsap.to(
+          {},
+          {
+            duration: 1.5,
+            ease: "power1.out",
+            onUpdate: function () {
+              const progress = this.progress();
+              const decayFactor = 1 - Math.pow(progress, 0.7);
+
+              // Combined movement calculation with reduced decay
+              const momentumDelta = velocityRef.current * decayFactor * 0.5;
+
+              // Apply movement to rotation angle
+              rotationAngleRef.current += momentumDelta;
+              updateCardPositions(rotationAngleRef.current);
+            },
+            onComplete: function () {
+              velocityRef.current *= 0.3;
+            },
+          }
+        );
+      }
     };
 
     const handleTouchEnd = () => {
