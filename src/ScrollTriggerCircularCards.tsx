@@ -72,7 +72,7 @@ const ScrollTriggerCircularCards = ({
     { title: "Street Photography", path: "pukul-lima" },
     { title: "Urban Capture", path: "pukul-lima" },
     { title: "Don't Wake Me Up", path: "dont-wake-me-up" },
-    { title: "Me", path: "dont-wake-me-up" },
+    { title: "About Me", path: "dont-wake-me-up" },
     { title: "Finders Keepers", path: "finders-keepers" },
     { title: "Fashion Photography", path: "finders-keepers" },
     { title: "Studio Photography", path: "finders-keepers" },
@@ -183,12 +183,12 @@ const ScrollTriggerCircularCards = ({
     e.preventDefault();
     e.stopPropagation();
 
-    console.log(
-      "Bubble clicked, mobile:",
-      isMobile,
-      "current state:",
-      isContactExpanded
-    );
+    // console.log(
+    //   "Bubble clicked, mobile:",
+    //   isMobile,
+    //   "current state:",
+    //   isContactExpanded
+    // );
 
     // Force the toggle regardless of mobile status
     setIsContactExpanded((prev) => !prev);

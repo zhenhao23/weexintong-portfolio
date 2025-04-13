@@ -184,7 +184,7 @@ const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
       if (!hasReachedLimitRef.current && !isTransitioning) {
         failSafeTimerRef.current = window.setTimeout(() => {
           if (!hasReachedLimitRef.current) {
-            console.log("Fail-safe timer triggering transition"); // Debug log
+            // console.log("Fail-safe timer triggering transition"); // Debug log
             hasReachedLimitRef.current = true;
             setIsTransitioning(true);
             onReachLimit(); // This should trigger the snap scroll
@@ -235,7 +235,7 @@ const VinylSpinner = ({ onReachLimit }: VinylSpinnerProps) => {
 
       // Modify the transition to properly reset overflow before scrolling
       transitionTimeoutRef.current = window.setTimeout(() => {
-        console.log("Triggering onReachLimit transition");
+        // console.log("Triggering onReachLimit transition");
         // Explicitly reset overflow to allow scrolling before transition
         document.body.style.overflow = "auto";
         onReachLimit(); // This triggers the snap scroll to the next section

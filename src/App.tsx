@@ -51,7 +51,7 @@ function MainContent() {
   };
 
   const transitionToCards = () => {
-    console.log("transitionToCards called");
+    // console.log("transitionToCards called");
     // setIsTransitioning(true);
 
     // Start the transition animation
