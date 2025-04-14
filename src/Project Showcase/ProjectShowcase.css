@@ -179,7 +179,6 @@
   display: none; /* Hide scrollbar for Chrome/Safari */
 }
 
-/* Fix the duplicate .project-nav rule - keep only this one */
 .project-nav {
   position: absolute;
   right: 15px;
@@ -187,22 +186,23 @@
   flex-direction: column;
   gap: 8px;
   z-index: 10;
-  /* Place the nav items initially below the container */
-  top: 100%; /* Start below the visible area */
-  padding-top: 30px; /* Add some space before the first item */
+  /* Change from top: 100% to top with actual value */
+  bottom: 0%; /* Start visible within the container */
+  padding-top: 0px;
 }
 
-/* Create a tall scrollable area without extending the container */
+/* Modify scrollable area structure */
 .nav-scroll-container::before {
   content: "";
   display: block;
-  height: 100%; /* Initial height equals container */
+  /* Remove or reduce this height to allow immediate visibility */
+  height: 0;
 }
 
 .nav-scroll-container::after {
   content: "";
   display: block;
-  height: 50vh; /* Create scrollable space - adjust as needed */
+  height: 180vh; /* Increase this height to create more scrollable space */
 }
 
 .project-nav-item {
@@ -317,13 +317,13 @@
   color: #7e7e7e;
   padding: 6px 12px;
   z-index: 10;
-  user-select: none; /* Prevents text selection */
-  pointer-events: none; /* Makes elements non-interactive */
 }
 
 .top-left {
   top: 0;
   left: 0;
+  user-select: none; /* Prevents text selection */
+  pointer-events: none; /* Makes elements non-interactive */
 }
 
 .top-right {
@@ -339,6 +339,64 @@
 .bottom-left {
   bottom: 0;
   left: 0;
+}
+
+/* Add this after your existing corner-text styles */
+.corner-text.bottom-left {
+  bottom: 0;
+  left: 0;
+  cursor: pointer;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+  text-decoration: none;
+}
+
+.corner-text.bottom-left:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+/* For links inside corner-text */
+.corner-text a {
+  color: inherit;
+  text-decoration: inherit;
+  cursor: pointer;
+}
+
+.corner-text a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+/* Add to c:\Users\weezh\OneDrive\Desktop\weexintong portfolio\weexintong-portfolio\src\Project Showcase\ProjectShowcase.css */
+
+.my-masonry-grid {
+  display: flex;
+  margin-left: -10px; /* gutter size offset */
+  width: auto;
+}
+.my-masonry-grid_column {
+  padding-left: 10px; /* gutter size */
+  background-clip: padding-box;
+}
+
+.masonry-item {
+  margin-bottom: 10px;
+}
+
+.masonry-item img {
+  border-radius: 0px;
+  transition: transform 0.3s ease;
+}
+
+.masonry-item img:hover {
+  transform: scale(1.02);
+}
+
+/* For the container - might need to adjust height based on your layout */
+.photo-container {
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
 }
 
 /* Media Queries for Tablets */

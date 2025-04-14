@@ -1,0 +1,232 @@
+import React, { useState, useRef, useEffect } from "react";
+import "./ProjectShowcase.css";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom"; // Import useNavigate hook
+import Masonry from "react-masonry-css";
+
+// Import street photography images
+import street1 from "../assets/portfolio pics/street1.jpg";
+import street2 from "../assets/portfolio pics/street2.jpg";
+import street3 from "../assets/portfolio pics/street3.jpg";
+import street4 from "../assets/portfolio pics/street4.jpg";
+import street5 from "../assets/portfolio pics/street5.jpg";
+import street6 from "../assets/portfolio pics/street6.jpg";
+import street7 from "../assets/portfolio pics/street7.jpg";
+import street8 from "../assets/portfolio pics/street8.jpg";
+import street9 from "../assets/portfolio pics/street9.jpg";
+import street10 from "../assets/portfolio pics/street10.jpg";
+import street11 from "../assets/portfolio pics/street11.jpg";
+import street12 from "../assets/portfolio pics/street12.jpg";
+
+const StreetPhotography: React.FC = () => {
+  const [isContactExpanded, setIsContactExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const bubbleRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate(); // Initialize the navigate function
+
+  const breakpointColumnsObj = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
+  };
+
+  // Create an array with all the street images
+  const streetImages = [
+    { src: street1, alt: "Street photography 1" },
+    { src: street4, alt: "Street photography 4" },
+    { src: street2, alt: "Street photography 2" },
+    { src: street3, alt: "Street photography 3" },
+    { src: street8, alt: "Street photography 8" },
+    { src: street5, alt: "Street photography 5" },
+    { src: street7, alt: "Street photography 7" },
+    { src: street6, alt: "Street photography 6" },
+
+    { src: street11, alt: "Street photography 11" },
+
+    { src: street12, alt: "Street photography 12" },
+    { src: street10, alt: "Street photography 10" },
+    { src: street9, alt: "Street photography 9" },
+  ];
+
+  // Handle close button click
+  const handleCloseClick = () => {
+    navigate("/"); // Navigate back to the cards view
+  };
+  // Add navigation functions
+  const handlePrevious = () => {
+    navigate("/project/dont-wake-me-up"); // The project that comes before this one
+  };
+
+  const handleNext = () => {
+    navigate("/project/street-photography"); // The project that comes after this one
+  };
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 768); // Common breakpoint for mobile
+    };
+
+    // Initial check
+    checkIfMobile();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", checkIfMobile);
+
+    // Clean up
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
+
+  // Animation variants
+  const bubbleVariants = {
+    collapsed: {
+      height: isMobile ? "50px" : "25px",
+      transition: {
+        duration: 0.4,
+        ease: "easeInOut",
+      },
+    },
+    expanded: {
+      height: isMobile ? "110px" : "94px", // Adjust these values based on your content
+      transition: {
+        duration: 0.8,
+        ease: "easeInOut",
+      },
+    },
+  };
+
+  // Handle mouse events with a delay to prevent flickering (for desktop)
+  const handleMouseEnter = () => {
+    if (!isMobile) {
+      setIsContactExpanded(true);
+    }
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent) => {
+    // Only apply hover behavior on desktop
+    if (!isMobile) {
+      // Check if the mouse is truly leaving the entire bubble
+      if (
+        bubbleRef.current &&
+        !bubbleRef.current.contains(e.relatedTarget as Node)
+      ) {
+        setIsContactExpanded(false);
+      }
+    }
+  };
+
+  // Handle click for mobile devices
+  const handleBubbleClick = () => {
+    if (isMobile) {
+      setIsContactExpanded((prev) => !prev);
+    }
+  };
+
+  return (
+    <div className="project-showcase-container">
+      {/* Corner text elements */}
+      <div className="corner-text top-left">Midpovs</div>
+      <div className="corner-text bottom-left">
+        <a>About me</a>
+      </div>
+      <div className="centered-card-wrapper">
+        <div className="centered-card">
+          <div className="card-container">
+            <div className="card-header">
+              <div className="header-left">
+                <span
+                  className="nav-button close-button"
+                  onClick={handleCloseClick}
+                >
+                  [close]
+                </span>
+              </div>
+              <div className="header-right">
+                <span className="nav-button" onClick={handlePrevious}>
+                  [previous]
+                </span>
+                <span className="nav-button" onClick={handleNext}>
+                  [next]
+                </span>
+              </div>
+            </div>
+            <div className="content-container">
+              <div className="photo-container">
+                <Masonry
+                  breakpointCols={breakpointColumnsObj}
+                  className="my-masonry-grid"
+                  columnClassName="my-masonry-grid_column"
+                >
+                  {streetImages.map((image, index) => (
+                    <div className="masonry-item" key={index}>
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        loading="lazy"
+                        style={{
+                          width: "100%",
+                          display: "block",
+                          marginBottom: "0px",
+                        }}
+                      />
+                    </div>
+                  ))}
+                </Masonry>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <motion.div
+        ref={bubbleRef}
+        className={`contact-bubble ${isContactExpanded ? "expanded" : ""}`}
+        variants={bubbleVariants}
+        initial="collapsed"
+        animate={isContactExpanded ? "expanded" : "collapsed"}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleBubbleClick}
+      >
+        <h3 className="contact-title">Let's talk</h3>
+        <AnimatePresence>
+          <motion.div
+            className="contact-content"
+            // variants={contentVariants}
+            initial="collapsed"
+            animate={isContactExpanded ? "expanded" : "collapsed"}
+          >
+            <a href="mailto:wxintong.work@gmail.com" className="contact-email">
+              wxintong.work@gmail.com
+            </a>
+            <div className="social-links">
+              <a
+                href="https://www.instagram.com/midpovs"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Instagram
+              </a>
+              <a
+                href="https://www.linkedin.com/in/weexintong"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LinkedIn
+              </a>
+              <a
+                href="https://medium.com/@username"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Medium
+              </a>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </motion.div>
+    </div>
+  );
+};
+
+export default StreetPhotography;

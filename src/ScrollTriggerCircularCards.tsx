@@ -69,13 +69,13 @@ const ScrollTriggerCircularCards = ({
   // Add an array of project titles and corresponding paths
   const projects = [
     { title: "Pukul Lima", path: "pukul-lima" },
-    { title: "Street Photography", path: "pukul-lima" },
-    { title: "Urban Capture", path: "pukul-lima" },
+    { title: "Street Photography", path: "street-photography" },
+    { title: "Street Photography No Frame", path: "street-photography-test" },
     { title: "Don't Wake Me Up", path: "dont-wake-me-up" },
     { title: "About Me", path: "dont-wake-me-up" },
     { title: "Finders Keepers", path: "finders-keepers" },
-    { title: "Fashion Photography", path: "finders-keepers" },
-    { title: "Studio Photography", path: "finders-keepers" },
+    { title: "Fashion Photography", path: "fashion-photography" },
+    { title: "Fashion Photography", path: "fashion-photography" },
   ];
 
   // Check if device is mobile
@@ -718,9 +718,9 @@ const ScrollTriggerCircularCards = ({
         </AnimatePresence>
       </motion.div>
       <div className="corner-text top-left">Midpovs</div>
-      <div className="corner-text top-right">Filmmaker</div>
-      <div className="corner-text bottom-right">Director</div>
-      <div className="corner-text bottom-left">Videographer</div>
+      <div className="corner-text bottom-left">
+        <a>About me</a>
+      </div>
 
       {/* <div className="scroll-down">
         Scroll down

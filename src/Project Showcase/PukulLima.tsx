@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./ProjectShowcase.css";
 import plGif from "../assets/postfolio gif/PL GIF.gif"; // Import the GIF file
-import plGifMobile from "../assets/postfolio gif/PL GIF (1).gif"; // Import the smaller GIF file
+// import plGifMobile from "../assets/postfolio gif/PL GIF (1).gif"; // Import the smaller GIF file
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
@@ -13,15 +13,15 @@ const PukulLima: React.FC = () => {
 
   // Handle close button click
   const handleCloseClick = () => {
-    navigate("/cards"); // Navigate back to the cards view
+    navigate("/"); // Navigate back to the cards view
   };
   // Add navigation functions
   const handlePrevious = () => {
-    navigate("/project/pukul-lima"); // The project that comes before this one
+    navigate("/project/street-photography"); // The project that comes before this one
   };
 
   const handleNext = () => {
-    navigate("/project/dont-wake-me-up"); // The project that comes after this one
+    navigate("/project/fashion-photography"); // The project that comes after this one
   };
 
   // Check if device is mobile
@@ -89,9 +89,9 @@ const PukulLima: React.FC = () => {
     <div className="project-showcase-container">
       {/* Corner text elements */}
       <div className="corner-text top-left">Midpovs</div>
-      <div className="corner-text top-right">Filmmaker</div>
-      <div className="corner-text bottom-right">Director</div>
-      <div className="corner-text bottom-left">Videographer</div>
+      <div className="corner-text bottom-left">
+        <a>About me</a>
+      </div>
       <div className="centered-card-wrapper">
         <div className="centered-card">
           <div className="card-container">
@@ -115,10 +115,7 @@ const PukulLima: React.FC = () => {
             </div>
             <div className="content-container">
               <div className="gif-container">
-                <img
-                  src={isMobile ? plGifMobile : plGif}
-                  alt="Pukul Lima Project"
-                />
+                <img src={isMobile ? plGif : plGif} alt="Pukul Lima Project" />
               </div>
               <div className="nav-scroll-container">
                 <div className="project-nav">
