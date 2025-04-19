@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 const PukulLima: React.FC = () => {
   const [isContactExpanded, setIsContactExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const bubbleRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate(); // Initialize the navigate function
 
@@ -15,13 +16,19 @@ const PukulLima: React.FC = () => {
   const handleCloseClick = () => {
     navigate("/"); // Navigate back to the cards view
   };
+
+  // Toggle project info display
+  const handleInfoClick = () => {
+    setShowInfo((prev) => !prev);
+  };
+
   // Add navigation functions
   const handlePrevious = () => {
     navigate("/project/street-photography"); // The project that comes before this one
   };
 
   const handleNext = () => {
-    navigate("/project/fashion-photography"); // The project that comes after this one
+    navigate("/project/urban-photography"); // The project that comes after this one
   };
 
   // Check if device is mobile
@@ -58,6 +65,24 @@ const PukulLima: React.FC = () => {
     },
   };
 
+  // Animation variants for info overlay
+  const infoVariants = {
+    hidden: {
+      opacity: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+  };
+
   // Handle mouse events with a delay to prevent flickering (for desktop)
   const handleMouseEnter = () => {
     if (!isMobile) {
@@ -88,10 +113,13 @@ const PukulLima: React.FC = () => {
   return (
     <div className="project-showcase-container">
       {/* Corner text elements */}
-      <div className="corner-text top-left">Midpovs</div>
-      <div className="corner-text bottom-left">
+      <div
+        className="corner-text top-left"
+        onClick={() => navigate("/project/about-me")}
+      >
         <a>About me</a>
       </div>
+      <div className="corner-text bottom-left">Midpovs</div>
       <div className="centered-card-wrapper">
         <div className="centered-card">
           <div className="card-container">
@@ -102,6 +130,12 @@ const PukulLima: React.FC = () => {
                   onClick={handleCloseClick}
                 >
                   [close]
+                </span>
+                <span
+                  className="nav-button info-button"
+                  onClick={handleInfoClick}
+                >
+                  [{showInfo ? "hide info" : "info"}]
                 </span>
               </div>
               <div className="header-right">
@@ -114,18 +148,86 @@ const PukulLima: React.FC = () => {
               </div>
             </div>
             <div className="content-container">
-              <div className="gif-container">
+              <div className={`gif-container ${showInfo ? "blurred" : ""}`}>
                 <img src={isMobile ? plGif : plGif} alt="Pukul Lima Project" />
               </div>
-              <div className="nav-scroll-container">
-                <div className="project-nav">
-                  <span className="project-nav-item">PROJECT</span>
-                  <span className="project-nav-item">INTRODUCTION</span>
-                  <span className="project-nav-item">CREDITS</span>
-                  <span className="project-nav-item">CREDITS</span>
-                  <span className="project-nav-item">CREDITS</span>
-                </div>
-              </div>
+
+              <AnimatePresence>
+                {showInfo && (
+                  <motion.div
+                    className="project-info-overlay"
+                    variants={infoVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
+                    <div
+                      className={`project-info-content ${
+                        isMobile ? "pukul-lima-content" : ""
+                      }`}
+                    >
+                      <h1>Pukul Lima: Falling Into Place</h1>
+                      <p className="project-description">
+                        Pukul Lima: Falling Into Place follows the journey of
+                        Rain Trees in Singapore, exploring the hands that shape
+                        them—carpenters, sawmill workers, and artists—uncovering
+                        a deep bond between people and the wood that once lived.
+                        The documentary is currently in submission to festivals,
+                        with hopes of sharing its story with the public soon.
+                      </p>
+
+                      <div
+                        className={`credits-container two-columns ${
+                          isMobile ? "pukul-lima-credits" : ""
+                        }`}
+                      >
+                        <div className="credits-column">
+                          <div className="credit-item">
+                            <span className="credit-role">Director</span>
+                            <span className="credit-name">Xin Tong</span>
+                          </div>
+                          <div className="credit-item">
+                            <span className="credit-role">DOP</span>
+                            <span className="credit-name">Luqman Hakim</span>
+                          </div>
+                          <div className="credit-item">
+                            <span className="credit-role">Producer</span>
+                            <span className="credit-name">Maybelle Myint</span>
+                          </div>
+                          <div className="credit-item">
+                            <span className="credit-role">Cast</span>
+                            <span className="credit-name">Ong Meng Hong</span>
+                          </div>
+                        </div>
+                        <div className="credits-column">
+                          <div className="credit-item">
+                            <span className="credit-role">Editor</span>
+                            <span className="credit-name">
+                              Shamil Iqmal
+                              <br />
+                              Xin Tong
+                            </span>
+                          </div>
+                          <div className="credit-item">
+                            <span className="credit-role">Gaffer</span>
+                            <span className="credit-name">Aaron Shazrin</span>
+                          </div>
+                          <div className="credit-item">
+                            <span className="credit-role">
+                              Production Designer
+                            </span>
+                            <span className="credit-name">Perline Peh</span>
+                          </div>
+                          <div className="credit-item">
+                            <span className="credit-role">Colorist</span>
+                            <span className="credit-name">Luqman Hakim</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>
@@ -158,20 +260,6 @@ const PukulLima: React.FC = () => {
                 rel="noopener noreferrer"
               >
                 Instagram
-              </a>
-              <a
-                href="https://www.linkedin.com/in/weexintong"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                LinkedIn
-              </a>
-              <a
-                href="https://medium.com/@username"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Medium
               </a>
             </div>
           </motion.div>

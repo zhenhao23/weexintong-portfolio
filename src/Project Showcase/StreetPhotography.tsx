@@ -24,6 +24,10 @@ const StreetPhotography: React.FC = () => {
   const bubbleRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate(); // Initialize the navigate function
 
+  // Lightbox state
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   const breakpointColumnsObj = {
     default: 4,
     1100: 3,
@@ -49,13 +53,61 @@ const StreetPhotography: React.FC = () => {
     { src: street9, alt: "Street photography 9" },
   ];
 
+  // Lightbox handlers
+  const openLightbox = (index: number) => {
+    setCurrentImageIndex(index);
+    setLightboxOpen(true);
+    document.body.style.overflow = "hidden"; // Prevent scrolling when lightbox is open
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+    document.body.style.overflow = "auto"; // Restore scrolling
+  };
+
+  const goToPrevImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? streetImages.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToNextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === streetImages.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!lightboxOpen) return;
+
+      switch (e.key) {
+        case "ArrowLeft":
+          goToPrevImage();
+          break;
+        case "ArrowRight":
+          goToNextImage();
+          break;
+        case "Escape":
+          closeLightbox();
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxOpen]);
+
   // Handle close button click
   const handleCloseClick = () => {
     navigate("/"); // Navigate back to the cards view
   };
   // Add navigation functions
   const handlePrevious = () => {
-    navigate("/project/street-photography-test"); // The project that comes before this one
+    navigate("/project/work-experience"); // The project that comes before this one
   };
 
   const handleNext = () => {
@@ -126,10 +178,13 @@ const StreetPhotography: React.FC = () => {
   return (
     <div className="project-showcase-container">
       {/* Corner text elements */}
-      <div className="corner-text top-left">Midpovs</div>
-      <div className="corner-text bottom-left">
+      <div
+        className="corner-text top-left"
+        onClick={() => navigate("/project/about-me")}
+      >
         <a>About me</a>
       </div>
+      <div className="corner-text bottom-left">Midpovs</div>
       <div className="centered-card-wrapper">
         <div className="centered-card">
           <div className="card-container">
@@ -159,7 +214,12 @@ const StreetPhotography: React.FC = () => {
                   columnClassName="my-masonry-grid_column"
                 >
                   {streetImages.map((image, index) => (
-                    <div className="masonry-item" key={index}>
+                    <div
+                      className="masonry-item"
+                      key={index}
+                      onClick={() => openLightbox(index)}
+                      style={{ cursor: "pointer" }}
+                    >
                       <div className="card-container">
                         <h3 className="card-title">{image.alt}</h3>
                         <img
@@ -181,6 +241,41 @@ const StreetPhotography: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Lightbox component */}
+      {lightboxOpen && (
+        <div className="lightbox-overlay" onClick={closeLightbox}>
+          <div
+            className="lightbox-container"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button className="lightbox-close" onClick={closeLightbox}>
+              ×
+            </button>
+            <button
+              className="lightbox-nav lightbox-prev"
+              onClick={goToPrevImage}
+            >
+              ‹
+            </button>
+            <div className="lightbox-content">
+              <img
+                src={streetImages[currentImageIndex].src}
+                alt={streetImages[currentImageIndex].alt}
+              />
+              <p className="lightbox-caption">
+                {streetImages[currentImageIndex].alt}
+              </p>
+            </div>
+            <button
+              className="lightbox-nav lightbox-next"
+              onClick={goToNextImage}
+            >
+              ›
+            </button>
+          </div>
+        </div>
+      )}
       <motion.div
         ref={bubbleRef}
         className={`contact-bubble ${isContactExpanded ? "expanded" : ""}`}
@@ -209,20 +304,6 @@ const StreetPhotography: React.FC = () => {
                 rel="noopener noreferrer"
               >
                 Instagram
-              </a>
-              <a
-                href="https://www.linkedin.com/in/weexintong"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                LinkedIn
-              </a>
-              <a
-                href="https://medium.com/@username"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Medium
               </a>
             </div>
           </motion.div>

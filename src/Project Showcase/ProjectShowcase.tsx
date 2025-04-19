@@ -132,20 +132,6 @@ const ProjectShowcase: React.FC = () => {
               >
                 Instagram
               </a>
-              <a
-                href="https://linkedin.com/in/username"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                LinkedIn
-              </a>
-              <a
-                href="https://medium.com/@username"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Medium
-              </a>
             </div>
           </motion.div>
         </AnimatePresence>

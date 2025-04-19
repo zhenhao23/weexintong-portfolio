@@ -15,6 +15,10 @@ const FashionPhotography: React.FC = () => {
   const bubbleRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate(); // Initialize the navigate function
 
+  // Lightbox state
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   const breakpointColumnsObj = {
     default: 3, // Maximum 3 columns
     900: 2, // 2 columns
@@ -23,13 +27,59 @@ const FashionPhotography: React.FC = () => {
 
   // Create an array with all the street images
   const streetImages = [
-    { src: fashion4, alt: "Fashion photography 4" },
     { src: fashion3, alt: "Fashion photography 3" },
     { src: fashion1, alt: "Fashion photography 1" },
+    { src: fashion4, alt: "Fashion photography 4" },
     { src: fashion2, alt: "Fashion photography 2" },
-    { src: fashion2, alt: "Fashion photography 2" },
-    { src: fashion3, alt: "Fashion photography 3" },
   ];
+
+  // Lightbox handlers
+  const openLightbox = (index: number) => {
+    setCurrentImageIndex(index);
+    setLightboxOpen(true);
+    document.body.style.overflow = "hidden"; // Prevent scrolling when lightbox is open
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+    document.body.style.overflow = "auto"; // Restore scrolling
+  };
+
+  const goToPrevImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? streetImages.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToNextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === streetImages.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!lightboxOpen) return;
+
+      switch (e.key) {
+        case "ArrowLeft":
+          goToPrevImage();
+          break;
+        case "ArrowRight":
+          goToNextImage();
+          break;
+        case "Escape":
+          closeLightbox();
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxOpen]);
 
   // Handle close button click
   const handleCloseClick = () => {
@@ -37,7 +87,7 @@ const FashionPhotography: React.FC = () => {
   };
   // Add navigation functions
   const handlePrevious = () => {
-    navigate("/project/pukul-lima"); // The project that comes before this one
+    navigate("/project/urban-photography"); // The project that comes before this one
   };
 
   const handleNext = () => {
@@ -108,10 +158,13 @@ const FashionPhotography: React.FC = () => {
   return (
     <div className="project-showcase-container">
       {/* Corner text elements */}
-      <div className="corner-text top-left">Midpovs</div>
-      <div className="corner-text bottom-left">
+      <div
+        className="corner-text top-left"
+        onClick={() => navigate("/project/about-me")}
+      >
         <a>About me</a>
       </div>
+      <div className="corner-text bottom-left">Midpovs</div>
       <div className="centered-card-wrapper">
         <div className="centered-card">
           <div className="card-container">
@@ -141,7 +194,12 @@ const FashionPhotography: React.FC = () => {
                   columnClassName="my-masonry-grid_column"
                 >
                   {streetImages.map((image, index) => (
-                    <div className="masonry-item" key={index}>
+                    <div
+                      className="masonry-item"
+                      key={index}
+                      onClick={() => openLightbox(index)}
+                      style={{ cursor: "pointer" }}
+                    >
                       <div className="card-container">
                         <h3 className="card-title">{image.alt}</h3>
                         <img
@@ -163,6 +221,41 @@ const FashionPhotography: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Lightbox component */}
+      {lightboxOpen && (
+        <div className="lightbox-overlay" onClick={closeLightbox}>
+          <div
+            className="lightbox-container"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button className="lightbox-close" onClick={closeLightbox}>
+              ×
+            </button>
+            <button
+              className="lightbox-nav lightbox-prev"
+              onClick={goToPrevImage}
+            >
+              ‹
+            </button>
+            <div className="lightbox-content">
+              <img
+                src={streetImages[currentImageIndex].src}
+                alt={streetImages[currentImageIndex].alt}
+              />
+              <p className="lightbox-caption">
+                {streetImages[currentImageIndex].alt}
+              </p>
+            </div>
+            <button
+              className="lightbox-nav lightbox-next"
+              onClick={goToNextImage}
+            >
+              ›
+            </button>
+          </div>
+        </div>
+      )}
       <motion.div
         ref={bubbleRef}
         className={`contact-bubble ${isContactExpanded ? "expanded" : ""}`}
@@ -191,20 +284,6 @@ const FashionPhotography: React.FC = () => {
                 rel="noopener noreferrer"
               >
                 Instagram
-              </a>
-              <a
-                href="https://www.linkedin.com/in/weexintong"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                LinkedIn
-              </a>
-              <a
-                href="https://medium.com/@username"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Medium
               </a>
             </div>
           </motion.div>

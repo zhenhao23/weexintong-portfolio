@@ -322,8 +322,6 @@
 .top-left {
   top: 0;
   left: 0;
-  user-select: none; /* Prevents text selection */
-  pointer-events: none; /* Makes elements non-interactive */
 }
 
 .top-right {
@@ -339,18 +337,20 @@
 .bottom-left {
   bottom: 0;
   left: 0;
+  user-select: none; /* Prevents text selection */
+  pointer-events: none; /* Makes elements non-interactive */
 }
 
 /* Add this after your existing corner-text styles */
-.corner-text.bottom-left {
-  bottom: 0;
+.corner-text.top-left {
+  top: 0;
   left: 0;
   cursor: pointer;
   transition: color 0.2s ease, text-decoration 0.2s ease;
   text-decoration: none;
 }
 
-.corner-text.bottom-left:hover {
+.corner-text.top-left:hover {
   color: #000;
   text-decoration: underline;
 }
@@ -399,6 +399,183 @@
   height: 100%;
 }
 
+/* ...existing styles... */
+
+/* Lightbox styles */
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.lightbox-container {
+  position: relative;
+  width: 90%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+.lightbox-caption {
+  color: white;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.lightbox-nav {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 40px;
+  cursor: pointer;
+  padding: 20px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightbox-prev {
+  left: -60px;
+}
+
+.lightbox-next {
+  right: -60px;
+}
+
+/* Add to c:\Users\weezh\OneDrive\Desktop\weexintong portfolio\weexintong-portfolio\src\Project Showcase\ProjectShowcase.css */
+
+/* Info button styles */
+.info-button {
+  margin-left: 15px;
+}
+
+/* GIF blur when info is shown */
+.gif-container.blurred img {
+  filter: blur(8px) brightness(0.6);
+  transition: filter 0.3s ease-in-out;
+}
+
+.gif-container img {
+  transition: filter 0.3s ease-in-out;
+}
+
+/* Project info overlay */
+.project-info-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.project-info-content {
+  width: 80%;
+  max-width: 800px;
+  padding: 30px 40px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.project-info-content h1 {
+  font-family: "New Science Light", sans-serif;
+  font-size: 2.5rem;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.project-description {
+  font-family: "New Science Light", sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 30px;
+}
+
+.credits-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.credit-item {
+  display: flex;
+  align-items: baseline;
+}
+
+.credit-role {
+  font-family: "New Science Light", sans-serif;
+  font-size: 0.9rem;
+  color: #777;
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.credit-name {
+  font-family: "New Science Regular", sans-serif;
+  font-size: 1rem;
+  color: #333;
+}
+
+.credits-container.two-columns {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  justify-content: space-between;
+}
+
+.credits-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gif-container img {
+  cursor: pointer;
+}
+
 /* Media Queries for Tablets */
 @media screen and (max-width: 1024px) {
   .centered-card-wrapper {
@@ -443,5 +620,89 @@
     display: block;
     height: 30vh;
   }
-  /* Remove the "height: auto !important" rule that was overriding animations */
+
+  .lightbox-nav {
+    font-size: 30px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.3); /* Add semi-transparent background */
+    border-radius: 50%; /* Make buttons circular */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1010; /* Ensure buttons are above other content */
+  }
+
+  .lightbox-prev {
+    left: 10px; /* Move inside the viewport instead of outside */
+  }
+
+  .lightbox-next {
+    right: 10px; /* Move inside the viewport instead of outside */
+  }
+
+  /* Adjust content to make room for internal buttons */
+  .lightbox-content img {
+    max-width: calc(100% - 60px); /* Add space on sides for buttons */
+  }
+
+  .project-info-content {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .project-info-content h1 {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+
+  /* General credit styles (existing) */
+  .credit-item {
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+
+  .credit-role {
+    width: auto;
+    margin-bottom: 2px;
+  }
+
+  /* Default mobile style for two columns (override) */
+  .credits-container.two-columns {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .credits-column {
+    width: 100%;
+  }
+
+  /* Special case for Pukul Lima - maintain two columns */
+  .pukul-lima-credits.credits-container.two-columns {
+    flex-direction: row;
+    gap: 15px;
+  }
+
+  /* Adjust font sizes for compact mobile view */
+  .pukul-lima-credits .credit-role {
+    font-size: 0.75rem;
+    margin-bottom: 1px;
+  }
+
+  .pukul-lima-credits .credit-name {
+    font-size: 0.85rem;
+  }
+
+  /* More compact spacing for Pukul Lima credits */
+  .pukul-lima-credits .credit-item {
+    margin-bottom: 6px;
+  }
+
+  /* Additional adjustments for Pukul Lima mobile view */
+  .pukul-lima-content.project-info-content .project-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 15px;
+  }
 }

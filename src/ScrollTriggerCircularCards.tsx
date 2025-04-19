@@ -8,8 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 // Import your portfolio images
 // You can replace the placeholders with actual imports later
 import photo1 from "./assets/portfolio pics/street1.jpg";
-import photo2 from "./assets/portfolio pics/street3.jpg";
-import photo3 from "./assets/portfolio pics/fashion1.jpg";
+import photo2 from "./assets/work experience/BURSTING POINT.png";
+import photo3 from "./assets/urban photography/urban3.jpg";
 import photo4 from "./assets/portfolio pics/fashion3.jpg";
 import profile from "./assets/portfolio pics/profile pic.jpg";
 import gif1 from "./assets/postfolio gif/DWMU GIF (1).gif";
@@ -53,8 +53,8 @@ const ScrollTriggerCircularCards = ({
     gif1,
     profile,
     gif2,
-    photo3,
     photo4,
+    photo3,
 
     gif3,
     photo1,
@@ -62,20 +62,20 @@ const ScrollTriggerCircularCards = ({
     gif1,
     profile,
     gif2,
-    photo3,
     photo4,
+    photo3,
   ];
 
   // Add an array of project titles and corresponding paths
   const projects = [
     { title: "Pukul Lima", path: "pukul-lima" },
     { title: "Street Photography", path: "street-photography" },
-    { title: "Street Photography No Frame", path: "street-photography-test" },
+    { title: "Work Experience", path: "work-experience" },
     { title: "Don't Wake Me Up", path: "dont-wake-me-up" },
-    { title: "About Me", path: "dont-wake-me-up" },
+    { title: "About Me", path: "about-me" },
     { title: "Finders Keepers", path: "finders-keepers" },
     { title: "Fashion Photography", path: "fashion-photography" },
-    { title: "Fashion Photography", path: "fashion-photography" },
+    { title: "Urban Photography", path: "urban-photography" },
   ];
 
   // Check if device is mobile
@@ -695,32 +695,27 @@ const ScrollTriggerCircularCards = ({
               >
                 LinkedIn
               </a>
-              <a
-                href="https://medium.com/@username"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (isMobile) {
-                    window.open("https://medium.com/@username", "_blank");
-                  }
-                }}
-                onTouchEnd={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  window.open("https://medium.com/@username", "_blank");
-                }}
-              >
-                Medium
-              </a>
             </div>
           </motion.div>
         </AnimatePresence>
       </motion.div>
-      <div className="corner-text top-left">Midpovs</div>
-      <div className="corner-text bottom-left">
-        <a>About me</a>
+      <div className="corner-text top-left">
+        <a
+          onClick={(e) => {
+            e.preventDefault();
+            onCardClick && onCardClick("about-me");
+          }}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onCardClick && onCardClick("about-me");
+          }}
+          href="#"
+        >
+          About me
+        </a>
       </div>
+      <div className="corner-text bottom-left">Midpovs</div>
 
       {/* <div className="scroll-down">
         Scroll down

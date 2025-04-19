@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 const DontWakeMeUp: React.FC = () => {
   const [isContactExpanded, setIsContactExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const bubbleRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate(); // Initialize the navigate function
 
@@ -15,13 +16,19 @@ const DontWakeMeUp: React.FC = () => {
   const handleCloseClick = () => {
     navigate("/"); // Navigate back to the cards view
   };
+
+  // Toggle project info display
+  const handleInfoClick = () => {
+    setShowInfo((prev) => !prev);
+  };
+
   // Add navigation functions
   const handlePrevious = () => {
-    navigate("/project/finders-keepers"); // The project that comes before this one
+    navigate("/project/about-me"); // The project that comes before this one
   };
 
   const handleNext = () => {
-    navigate("/project/street-photography-test"); // The project that comes after this one
+    navigate("/project/work-experience"); // The project that comes after this one
   };
 
   // Check if device is mobile
@@ -58,6 +65,24 @@ const DontWakeMeUp: React.FC = () => {
     },
   };
 
+  // Animation variants for info overlay
+  const infoVariants = {
+    hidden: {
+      opacity: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+  };
+
   // Handle mouse events with a delay to prevent flickering (for desktop)
   const handleMouseEnter = () => {
     if (!isMobile) {
@@ -88,10 +113,13 @@ const DontWakeMeUp: React.FC = () => {
   return (
     <div className="project-showcase-container">
       {/* Corner text elements */}
-      <div className="corner-text top-left">Midpovs</div>
-      <div className="corner-text bottom-left">
+      <div
+        className="corner-text top-left"
+        onClick={() => navigate("/project/about-me")}
+      >
         <a>About me</a>
       </div>
+      <div className="corner-text bottom-left">Midpovs</div>
       <div className="centered-card-wrapper">
         <div className="centered-card">
           <div className="card-container">
@@ -102,6 +130,12 @@ const DontWakeMeUp: React.FC = () => {
                   onClick={handleCloseClick}
                 >
                   [close]
+                </span>
+                <span
+                  className="nav-button info-button"
+                  onClick={handleInfoClick}
+                >
+                  [{showInfo ? "hide info" : "info"}]
                 </span>
               </div>
               <div className="header-right">
@@ -114,18 +148,69 @@ const DontWakeMeUp: React.FC = () => {
               </div>
             </div>
             <div className="content-container">
-              <div className="gif-container">
-                <img src={isMobile ? plGif : plGif} alt="Pukul Lima Project" />
+              <div className={`gif-container ${showInfo ? "blurred" : ""}`}>
+                <a
+                  href="https://vimeo.com/1076739686"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={isMobile ? plGif : plGif}
+                    alt="Don't Wake Me Up Project"
+                  />
+                </a>
               </div>
-              <div className="nav-scroll-container">
-                <div className="project-nav">
-                  <span className="project-nav-item">PROJECT</span>
-                  <span className="project-nav-item">INTRODUCTION</span>
-                  <span className="project-nav-item">CREDITS</span>
-                  <span className="project-nav-item">CREDITS</span>
-                  <span className="project-nav-item">CREDITS</span>
-                </div>
-              </div>
+
+              <AnimatePresence>
+                {showInfo && (
+                  <motion.div
+                    className="project-info-overlay"
+                    variants={infoVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
+                    <div className="project-info-content">
+                      <h1>Don't Wake Me Up</h1>
+                      <p className="project-description">
+                        In a deep struggle against fading memories, a girl is
+                        haunted by the absence of a beloved friend, fearing that
+                        ceasing to remember will erase her friend from
+                        existence.
+                      </p>
+
+                      <div className="credits-container">
+                        <div className="credit-item">
+                          <span className="credit-role">
+                            Director, writer & editor
+                          </span>
+                          <span className="credit-name">Xin Tong</span>
+                        </div>
+                        <div className="credit-item">
+                          <span className="credit-role">DOP</span>
+                          <span className="credit-name">
+                            Casey Phua & Xin Tong
+                          </span>
+                        </div>
+                        <div className="credit-item">
+                          <span className="credit-role">Casts</span>
+                          <span className="credit-name">
+                            Ademi Kambarbekova & Xin Tong
+                          </span>
+                        </div>
+                        <div className="credit-item">
+                          <span className="credit-role">
+                            Production assistant
+                          </span>
+                          <span className="credit-name">
+                            Joshua Toh & Tiffany Tan
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>
@@ -165,13 +250,6 @@ const DontWakeMeUp: React.FC = () => {
                 rel="noopener noreferrer"
               >
                 LinkedIn
-              </a>
-              <a
-                href="https://medium.com/@username"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Medium
               </a>
             </div>
           </motion.div>

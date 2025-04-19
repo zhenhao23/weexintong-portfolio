@@ -4,8 +4,10 @@ import PukulLima from "./Project Showcase/PukulLima";
 import FindersKeepers from "./Project Showcase/FindersKeepers";
 import DontWakeMeUp from "./Project Showcase/Don'tWakeMeUp";
 import StreetPhotography from "./Project Showcase/StreetPhotography";
-import StreetPhotographyTest from "./Project Showcase/StreetPhotographyTest";
 import FashionPhotography from "./Project Showcase/FashionPhotography";
+import WorkExperience from "./Project Showcase/WorkExperience";
+import UrbanPhotography from "./Project Showcase/UrbanPhotography";
+import AboutMe from "./Project Showcase/AboutMe";
 import {
   BrowserRouter as Router,
   Routes,
@@ -49,13 +51,15 @@ function App() {
           element={<StreetPhotography />}
         />
         <Route
-          path="/project/street-photography-test"
-          element={<StreetPhotographyTest />}
-        />
-        <Route
           path="/project/fashion-photography"
           element={<FashionPhotography />}
         />
+        <Route path="/project/work-experience" element={<WorkExperience />} />
+        <Route
+          path="/project/urban-photography"
+          element={<UrbanPhotography />}
+        />
+        <Route path="/project/about-me" element={<AboutMe />} />
         {/* Add fallback for other project paths */}
         <Route path="/project/:projectId" element={<PukulLima />} />
       </Routes>

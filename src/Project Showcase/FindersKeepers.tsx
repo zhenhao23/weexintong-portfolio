@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 const FindersKeepers: React.FC = () => {
   const [isContactExpanded, setIsContactExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const bubbleRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate(); // Initialize the navigate function
 
@@ -14,13 +15,19 @@ const FindersKeepers: React.FC = () => {
   const handleCloseClick = () => {
     navigate("/"); // Navigate back to the cards view
   };
+
+  // Toggle project info display
+  const handleInfoClick = () => {
+    setShowInfo((prev) => !prev);
+  };
+
   // Add navigation functions
   const handlePrevious = () => {
     navigate("/project/fashion-photography"); // The project that comes before this one
   };
 
   const handleNext = () => {
-    navigate("/project/dont-wake-me-up"); // The project that comes after this one
+    navigate("/project/about-me"); // The project that comes after this one
   };
 
   // Check if device is mobile
@@ -57,6 +64,24 @@ const FindersKeepers: React.FC = () => {
     },
   };
 
+  // Animation variants for info overlay
+  const infoVariants = {
+    hidden: {
+      opacity: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+  };
+
   // Handle mouse events with a delay to prevent flickering (for desktop)
   const handleMouseEnter = () => {
     if (!isMobile) {
@@ -87,10 +112,13 @@ const FindersKeepers: React.FC = () => {
   return (
     <div className="project-showcase-container">
       {/* Corner text elements */}
-      <div className="corner-text top-left">Midpovs</div>
-      <div className="corner-text bottom-left">
+      <div
+        className="corner-text top-left"
+        onClick={() => navigate("/project/about-me")}
+      >
         <a>About me</a>
       </div>
+      <div className="corner-text bottom-left">Midpovs</div>
       <div className="centered-card-wrapper">
         <div className="centered-card">
           <div className="card-container">
@@ -101,6 +129,12 @@ const FindersKeepers: React.FC = () => {
                   onClick={handleCloseClick}
                 >
                   [close]
+                </span>
+                <span
+                  className="nav-button info-button"
+                  onClick={handleInfoClick}
+                >
+                  [{showInfo ? "hide info" : "info"}]
                 </span>
               </div>
               <div className="header-right">
@@ -113,18 +147,65 @@ const FindersKeepers: React.FC = () => {
               </div>
             </div>
             <div className="content-container">
-              <div className="gif-container">
-                <img src={plGif} alt="Pukul Lima Project" />
+              <div className={`gif-container ${showInfo ? "blurred" : ""}`}>
+                <a
+                  href="https://vimeo.com/1076741582"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src={plGif} alt="Finders Keepers Project" />
+                </a>
               </div>
-              <div className="nav-scroll-container">
-                <div className="project-nav">
-                  <span className="project-nav-item">PROJECT</span>
-                  <span className="project-nav-item">INTRODUCTION</span>
-                  <span className="project-nav-item">CREDITS</span>
-                  <span className="project-nav-item">CREDITS</span>
-                  <span className="project-nav-item">CREDITS</span>
-                </div>
-              </div>
+
+              <AnimatePresence>
+                {showInfo && (
+                  <motion.div
+                    className="project-info-overlay"
+                    variants={infoVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
+                    <div className="project-info-content">
+                      <h1>Finders Keepers</h1>
+                      <p className="project-description">
+                        Finders Keepers is an innovative tv commercial
+                        showcasing a futuristic concept, promoting inclusivity
+                        through the street-style clothing line.
+                      </p>
+
+                      <div className="credits-container">
+                        <div className="credit-item">
+                          <span className="credit-role">
+                            creative director & editor
+                          </span>
+                          <span className="credit-name">Xin Tong</span>
+                        </div>
+                        <div className="credit-item">
+                          <span className="credit-role">cinematographer</span>
+                          <span className="credit-name">Casey Phua</span>
+                        </div>
+                        <div className="credit-item">
+                          <span className="credit-role">casts</span>
+                          <span className="credit-name">
+                            Jyu (Jia Yu), Cate Tan & Suyoung
+                          </span>
+                        </div>
+                        <div className="credit-item">
+                          <span className="credit-role">Bts</span>
+                          <span className="credit-name">
+                            Joshua Toh & Maybelle Myint
+                          </span>
+                        </div>
+                        <div className="credit-item">
+                          <span className="credit-role">music</span>
+                          <span className="credit-name">Jang Tae Oh</span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>
@@ -157,20 +238,6 @@ const FindersKeepers: React.FC = () => {
                 rel="noopener noreferrer"
               >
                 Instagram
-              </a>
-              <a
-                href="https://www.linkedin.com/in/weexintong"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                LinkedIn
-              </a>
-              <a
-                href="https://medium.com/@username"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Medium
               </a>
             </div>
           </motion.div>

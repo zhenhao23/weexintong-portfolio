@@ -77,7 +77,7 @@ h1 {
   max-width: 300px;
 }
 .card-2 {
-  max-width: 300px;
+  max-width: 210px;
 }
 .card-3 {
   max-width: 400px;
@@ -92,7 +92,7 @@ h1 {
   max-width: 250px;
 }
 .card-7 {
-  max-width: 250px;
+  max-width: 300px;
 }
 
 img {
@@ -232,7 +232,7 @@ img {
     max-width: 420px;
   }
   .card-2 {
-    max-width: 420px;
+    max-width: 360px;
   }
   .card-3 {
     max-width: 420px;
@@ -247,7 +247,7 @@ img {
     max-width: 360px;
   }
   .card-7 {
-    max-width: 360px;
+    max-width: 420px;
   }
 
   h1 {
@@ -279,7 +279,7 @@ img {
     max-width: 320px;
   }
   .card-2 {
-    max-width: 320px;
+    max-width: 260px;
   }
   .card-3 {
     max-width: 320px;
@@ -294,7 +294,7 @@ img {
     max-width: 260px;
   }
   .card-7 {
-    max-width: 260px;
+    max-width: 320px;
   }
 
   .card-title {
