@@ -21,7 +21,7 @@
   flex: 0 0 auto;
   width: 300px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   position: sticky; /* Keep image in view while scrolling */
   top: 0;
 }
