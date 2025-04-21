@@ -182,7 +182,7 @@ const FindersKeepers: React.FC = () => {
                           <span className="credit-name">Xin Tong</span>
                         </div>
                         <div className="credit-item">
-                          <span className="credit-role">cinematographer</span>
+                          <span className="credit-role">DOP</span>
                           <span className="credit-name">Casey Phua</span>
                         </div>
                         <div className="credit-item">

@@ -15,10 +15,6 @@ const WorkExperience: React.FC = () => {
   const bubbleRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate(); // Initialize the navigate function
 
-  // Lightbox state
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   const breakpointColumnsObj = {
     default: 3, // Maximum 3 columns
     900: 2, // 2 columns
@@ -27,59 +23,27 @@ const WorkExperience: React.FC = () => {
 
   // Create an array with all the street images
   const streetImages = [
-    { src: BURSTINGPOINT, alt: "BURSTING POINT (casting assist)" },
-    { src: PULAU, alt: "PULAU (casting assist)" },
-    { src: OPERATIONBLACKOPS, alt: "OPERATION BLACK-OPS (f&b crew)" },
-    { src: BROTHERSINARMS, alt: "BROTHERS IN ARMS (art assist)" },
+    {
+      src: BURSTINGPOINT,
+      alt: "BURSTING POINT (casting assist)",
+      link: "https://www.youtube.com/watch?v=QbjsdQfy76o", // Add your actual link here
+    },
+    {
+      src: PULAU,
+      alt: "PULAU (casting assist)",
+      link: "https://www.youtube.com/watch?v=pQ_mbrY11So", // Add your actual link here
+    },
+    {
+      src: OPERATIONBLACKOPS,
+      alt: "OPERATION BLACK-OPS (f&b crew)",
+      link: "https://www.youtube.com/watch?v=k1fkCGZntTY", // Add your actual link here
+    },
+    {
+      src: BROTHERSINARMS,
+      alt: "BROTHERS IN ARMS (art assist)",
+      link: "https://www.isabella-tan.com/brothersinarms", // Add your actual link here
+    },
   ];
-
-  // Lightbox handlers
-  const openLightbox = (index: number) => {
-    setCurrentImageIndex(index);
-    setLightboxOpen(true);
-    document.body.style.overflow = "hidden"; // Prevent scrolling when lightbox is open
-  };
-
-  const closeLightbox = () => {
-    setLightboxOpen(false);
-    document.body.style.overflow = "auto"; // Restore scrolling
-  };
-
-  const goToPrevImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? streetImages.length - 1 : prevIndex - 1
-    );
-  };
-
-  const goToNextImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === streetImages.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
-  // Handle keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!lightboxOpen) return;
-
-      switch (e.key) {
-        case "ArrowLeft":
-          goToPrevImage();
-          break;
-        case "ArrowRight":
-          goToNextImage();
-          break;
-        case "Escape":
-          closeLightbox();
-          break;
-        default:
-          break;
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [lightboxOpen]);
 
   // Handle close button click
   const handleCloseClick = () => {
@@ -197,7 +161,7 @@ const WorkExperience: React.FC = () => {
                     <div
                       className="masonry-item"
                       key={index}
-                      onClick={() => openLightbox(index)}
+                      onClick={() => window.open(image.link, "_blank")} // Open link in new tab
                       style={{ cursor: "pointer" }}
                     >
                       <div className="card-container">
@@ -222,40 +186,6 @@ const WorkExperience: React.FC = () => {
         </div>
       </div>
 
-      {/* Lightbox component */}
-      {lightboxOpen && (
-        <div className="lightbox-overlay" onClick={closeLightbox}>
-          <div
-            className="lightbox-container"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button className="lightbox-close" onClick={closeLightbox}>
-              ×
-            </button>
-            <button
-              className="lightbox-nav lightbox-prev"
-              onClick={goToPrevImage}
-            >
-              ‹
-            </button>
-            <div className="lightbox-content">
-              <img
-                src={streetImages[currentImageIndex].src}
-                alt={streetImages[currentImageIndex].alt}
-              />
-              <p className="lightbox-caption">
-                {streetImages[currentImageIndex].alt}
-              </p>
-            </div>
-            <button
-              className="lightbox-nav lightbox-next"
-              onClick={goToNextImage}
-            >
-              ›
-            </button>
-          </div>
-        </div>
-      )}
       <motion.div
         ref={bubbleRef}
         className={`contact-bubble ${isContactExpanded ? "expanded" : ""}`}
