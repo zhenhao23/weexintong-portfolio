@@ -27,10 +27,10 @@ const FashionPhotography: React.FC = () => {
 
   // Create an array with all the street images
   const streetImages = [
-    { src: fashion3, alt: "Fashion photography 3" },
-    { src: fashion1, alt: "Fashion photography 1" },
-    { src: fashion4, alt: "Fashion photography 4" },
-    { src: fashion2, alt: "Fashion photography 2" },
+    { src: fashion3, alt: "" },
+    { src: fashion1, alt: "" },
+    { src: fashion4, alt: "" },
+    { src: fashion2, alt: "" },
   ];
 
   // Lightbox handlers
@@ -164,7 +164,7 @@ const FashionPhotography: React.FC = () => {
       >
         <a>About me</a>
       </div>
-      <div className="corner-text bottom-left">Midpovs</div>
+      {/* <div className="corner-text bottom-left">Midpovs</div> */}
       <div className="centered-card-wrapper">
         <div className="centered-card">
           <div className="card-container">
@@ -201,7 +201,7 @@ const FashionPhotography: React.FC = () => {
                       style={{ cursor: "pointer" }}
                     >
                       <div className="card-container">
-                        <h3 className="card-title">{image.alt}</h3>
+                        <h3 className="card-title">&nbsp;</h3>
                         <img
                           src={image.src}
                           alt={image.alt}

@@ -69,13 +69,13 @@ const ScrollTriggerCircularCards = ({
   // Add an array of project titles and corresponding paths
   const projects = [
     { title: "Pukul Lima", path: "pukul-lima" },
-    { title: "Street Photography", path: "street-photography" },
+    { title: "Film Photography", path: "street-photography" },
     { title: "Work Experience", path: "work-experience" },
     { title: "Don't Wake Me Up", path: "dont-wake-me-up" },
     { title: "About Me", path: "about-me" },
     { title: "Finders Keepers", path: "finders-keepers" },
-    { title: "Fashion Photography", path: "fashion-photography" },
-    { title: "Urban Photography", path: "urban-photography" },
+    { title: "Editorial Photography", path: "fashion-photography" },
+    { title: "Film Photography", path: "urban-photography" },
   ];
 
   // Check if device is mobile
@@ -715,7 +715,7 @@ const ScrollTriggerCircularCards = ({
           About me
         </a>
       </div>
-      <div className="corner-text bottom-left">Midpovs</div>
+      {/* <div className="corner-text bottom-left">Midpovs</div> */}
 
       {/* <div className="scroll-down">
         Scroll down

@@ -119,7 +119,7 @@ const DontWakeMeUp: React.FC = () => {
       >
         <a>About me</a>
       </div>
-      <div className="corner-text bottom-left">Midpovs</div>
+      {/* <div className="corner-text bottom-left">Midpovs</div> */}
       <div className="centered-card-wrapper">
         <div className="centered-card">
           <div className="card-container">

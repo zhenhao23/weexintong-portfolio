@@ -88,7 +88,7 @@ const AboutMe: React.FC = () => {
       >
         <a>About me</a>
       </div>
-      <div className="corner-text bottom-left">Midpovs</div>
+      {/* <div className="corner-text bottom-left">Midpovs</div> */}
       <div className="centered-card-wrapper">
         <div className="centered-card">
           <div className="card-container about-me-card">
@@ -117,7 +117,7 @@ const AboutMe: React.FC = () => {
               <div className="about-me-text">
                 <h1>About me</h1>
                 <p>
-                  Hello! I'm <span className="highlight">xin tong</span>, an
+                  Hello! I'm <span className="highlight">Xin Tong</span>, an
                   aspiring director currently pursuing a Diploma in Broadcast
                   Media at LASALLE College of the Arts. I find my most genuine
                   form of self-expression through storytelling shaped by light

@@ -39,23 +39,23 @@ const UrbanPhotography: React.FC = () => {
 
   // Create an array with all the street images
   const streetImages = [
-    { src: urban6, alt: "Urban photography 6" },
+    { src: urban6, alt: "" },
 
-    { src: urban4, alt: "Urban photography 4" },
-    { src: urban2, alt: "Urban photography 2" },
-    { src: urban3, alt: "Urban photography 3" },
-    { src: urban8, alt: "Urban photography 8" },
-    { src: urban5, alt: "Urban photography 5" },
-    { src: urban7, alt: "Urban photography 7" },
+    { src: urban4, alt: "" },
+    { src: urban2, alt: "" },
+    { src: urban3, alt: "" },
+    { src: urban8, alt: "" },
+    { src: urban5, alt: "" },
+    { src: urban7, alt: "" },
 
-    { src: urban11, alt: "Urban photography 11" },
+    { src: urban11, alt: "" },
 
-    { src: urban12, alt: "Urban photography 12" },
-    { src: urban10, alt: "Urban photography 10" },
-    { src: urban9, alt: "Urban photography 9" },
-    { src: urban13, alt: "Urban photography 13" },
-    { src: urban14, alt: "Urban photography 14" },
-    { src: urban1, alt: "Urban photography 1" },
+    { src: urban12, alt: "" },
+    { src: urban10, alt: "" },
+    { src: urban9, alt: "" },
+    { src: urban13, alt: "" },
+    { src: urban14, alt: "" },
+    { src: urban1, alt: "" },
   ];
 
   // Lightbox handlers
@@ -189,7 +189,7 @@ const UrbanPhotography: React.FC = () => {
       >
         <a>About me</a>
       </div>
-      <div className="corner-text bottom-left">Midpovs</div>
+      {/* <div className="corner-text bottom-left">Midpovs</div> */}
       <div className="centered-card-wrapper">
         <div className="centered-card">
           <div className="card-container">
@@ -226,7 +226,7 @@ const UrbanPhotography: React.FC = () => {
                       style={{ cursor: "pointer" }}
                     >
                       <div className="card-container">
-                        <h3 className="card-title">{image.alt}</h3>
+                        <h3 className="card-title">&nbsp;</h3>
                         <img
                           src={image.src}
                           alt={image.alt}

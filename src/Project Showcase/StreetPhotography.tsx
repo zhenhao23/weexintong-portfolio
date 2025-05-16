@@ -37,20 +37,20 @@ const StreetPhotography: React.FC = () => {
 
   // Create an array with all the street images
   const streetImages = [
-    { src: street1, alt: "Street photography 1" },
-    { src: street4, alt: "Street photography 4" },
-    { src: street2, alt: "Street photography 2" },
-    { src: street3, alt: "Street photography 3" },
-    { src: street8, alt: "Street photography 8" },
-    { src: street5, alt: "Street photography 5" },
-    { src: street7, alt: "Street photography 7" },
-    { src: street6, alt: "Street photography 6" },
+    { src: street1, alt: "" },
+    { src: street4, alt: "" },
+    { src: street2, alt: "" },
+    { src: street3, alt: "" },
+    { src: street8, alt: "" },
+    { src: street5, alt: "" },
+    { src: street7, alt: "" },
+    { src: street6, alt: "" },
 
-    { src: street11, alt: "Street photography 11" },
+    { src: street11, alt: "" },
 
-    { src: street12, alt: "Street photography 12" },
-    { src: street10, alt: "Street photography 10" },
-    { src: street9, alt: "Street photography 9" },
+    { src: street12, alt: "" },
+    { src: street10, alt: "" },
+    { src: street9, alt: "" },
   ];
 
   // Lightbox handlers
@@ -184,7 +184,7 @@ const StreetPhotography: React.FC = () => {
       >
         <a>About me</a>
       </div>
-      <div className="corner-text bottom-left">Midpovs</div>
+      {/* <div className="corner-text bottom-left">Midpovs</div> */}
       <div className="centered-card-wrapper">
         <div className="centered-card">
           <div className="card-container">
@@ -221,7 +221,7 @@ const StreetPhotography: React.FC = () => {
                       style={{ cursor: "pointer" }}
                     >
                       <div className="card-container">
-                        <h3 className="card-title">{image.alt}</h3>
+                        <h3 className="card-title">&nbsp;</h3>
                         <img
                           src={image.src}
                           alt={image.alt}
