@@ -40,7 +40,7 @@ const WorkExperience: React.FC = () => {
     },
     {
       src: BROTHERSINARMS,
-      alt: "BROTHERS IN ARMS (art assist)",
+      alt: "TOGETHER DAYS (art assist)",
       link: "https://www.isabella-tan.com/brothersinarms", // Add your actual link here
     },
   ];
