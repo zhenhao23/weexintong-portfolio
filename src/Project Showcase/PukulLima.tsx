@@ -149,7 +149,16 @@ const PukulLima: React.FC = () => {
             </div>
             <div className="content-container">
               <div className={`gif-container ${showInfo ? "blurred" : ""}`}>
-                <img src={isMobile ? plGif : plGif} alt="Pukul Lima Project" />
+                <a
+                  href="https://vimeo.com/1114126789"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={isMobile ? plGif : plGif}
+                    alt="Pukul Lima Project"
+                  />
+                </a>
               </div>
 
               <AnimatePresence>
@@ -172,8 +181,6 @@ const PukulLima: React.FC = () => {
                         Rain Trees in Singapore, exploring the hands that shape
                         them—carpenters, sawmill workers, and artists—uncovering
                         a deep bond between people and the wood that once lived.
-                        The documentary is currently in submission to festivals,
-                        with hopes of sharing its story with the public soon.
                       </p>
 
                       <div
