@@ -18,9 +18,6 @@ import gif3 from "./assets/portfolio-gif/PL GIF (1).gif";
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
-// Add this line to detect Safari browser
-const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
 // Define props type for the component
 interface ScrollTriggerCircularCardsProps {
   onCardClick?: (projectPath: string) => void;
@@ -311,29 +308,32 @@ const ScrollTriggerCircularCards = ({
           opacity *= horizontalFactor;
         }
 
-        // In the updateOpacity function, change the backdrop filter application:
-
-        // Fix: Apply styles directly to the element instead of using GSAP for backdrop-filter
         if (opacity > 0) {
-          gsap.set(card, {
-            opacity: opacity,
-            visibility: "visible",
-          });
-
-          // Apply backdrop-filter to the card itself instead of the container
-          card.style.backdropFilter = "blur(20px)";
-          if (isSafari) {
-            // Use type assertion to bypass TypeScript's type checking for the vendor prefix
-            (card.style as any).webkitBackdropFilter = "blur(20px)";
-          }
+          gsap.set(card, { opacity: opacity, visibility: "visible" });
         } else {
-          gsap.set(card, {
-            opacity: 0,
-            visibility: "hidden",
-          });
+          gsap.set(card, { opacity: 0, visibility: "hidden" });
         }
       });
     };
+    const startMomentumAnimation = () => {
+      if (animationRef.current) animationRef.current.kill();
+      animationRef.current = gsap.to(
+        {},
+        {
+          duration: 1.5,
+          ease: "power1.out",
+          onUpdate: function () {
+            const decayFactor = 1 - Math.pow(this.progress(), 0.7);
+            rotationAngleRef.current += velocityRef.current * decayFactor * 0.5;
+            updateCardPositions(rotationAngleRef.current);
+          },
+          onComplete: function () {
+            velocityRef.current *= 0.3;
+          },
+        }
+      );
+    };
+
     // Initial setup
     updateCardPositions();
 
@@ -403,29 +403,7 @@ const ScrollTriggerCircularCards = ({
       //   velocityRef.current
       // );
 
-      // Instead of direct update, animate to target position smoothly
-      // Instead of direct update, animate to target position smoothly
-      animationRef.current = gsap.to(
-        {},
-        {
-          duration: 1.5, // Increased from 0.8 to 2.0 seconds
-          ease: "power1.out", // Changed to a more gradual easing
-          onUpdate: function () {
-            const progress = this.progress();
-            const decayFactor = 1 - Math.pow(progress, 0.7); // More gradual decay curve
-
-            // Combined movement calculation with reduced decay
-            const momentumDelta = velocityRef.current * decayFactor * 0.5;
-
-            // Apply movement to rotation angle
-            rotationAngleRef.current += momentumDelta;
-            updateCardPositions(rotationAngleRef.current);
-          },
-          onComplete: function () {
-            velocityRef.current *= 0.3; // Reduce less aggressively (was 0.5)
-          },
-        }
-      );
+      startMomentumAnimation();
     };
 
     // Add wheel event listener
@@ -516,52 +494,13 @@ const ScrollTriggerCircularCards = ({
           velocityRef.current = touchDirection * minTouchVelocity;
         }
 
-        // Start the animation to update the wheel position
-        animationRef.current = gsap.to(
-          {},
-          {
-            duration: 1.5,
-            ease: "power1.out",
-            onUpdate: function () {
-              const progress = this.progress();
-              const decayFactor = 1 - Math.pow(progress, 0.7);
-
-              // Combined movement calculation with reduced decay
-              const momentumDelta = velocityRef.current * decayFactor * 0.5;
-
-              // Apply movement to rotation angle
-              rotationAngleRef.current += momentumDelta;
-              updateCardPositions(rotationAngleRef.current);
-            },
-            onComplete: function () {
-              velocityRef.current *= 0.3;
-            },
-          }
-        );
+        startMomentumAnimation();
       }
     };
 
     const handleTouchEnd = () => {
-      // We only need to handle touchend if no animation is running
-      // If animation is already running from touchmove, we can let it continue
       if (!animationRef.current && Math.abs(velocityRef.current) > 0.0001) {
-        animationRef.current = gsap.to(
-          {},
-          {
-            duration: 1.5,
-            ease: "power1.out",
-            onUpdate: function () {
-              const progress = this.progress();
-              const decayFactor = 1 - Math.pow(progress, 0.7);
-              const momentumDelta = velocityRef.current * decayFactor * 0.5;
-              rotationAngleRef.current += momentumDelta;
-              updateCardPositions(rotationAngleRef.current);
-            },
-            onComplete: function () {
-              velocityRef.current *= 0.3;
-            },
-          }
-        );
+        startMomentumAnimation();
       }
     };
 

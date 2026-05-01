@@ -68,6 +68,8 @@ h1 {
   /* aspect-ratio: 16 / 10; */
   cursor: pointer;
   border-radius: 8px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .card-0 {
