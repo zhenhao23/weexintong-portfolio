@@ -6,14 +6,11 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // Import your portfolio images
 // You can replace the placeholders with actual imports later
-import photo1 from "./assets/portfolio pics/street1.jpg";
 import photo2 from "./assets/work experience/BURSTING POINT.png";
-import photo3 from "./assets/urban photography/urban3.jpg";
-import photo4 from "./assets/portfolio pics/fashion3.jpg";
 import profile from "./assets/portfolio pics/profile pic.jpg";
-import gif1 from "./assets/portfolio-gif/DWMU GIF (1).gif";
-import gif2 from "./assets/portfolio-gif/FK GIF (1).gif";
-import gif3 from "./assets/portfolio-gif/PL GIF (1).gif";
+const gif1 = "https://res.cloudinary.com/dlsyveahz/video/upload/DWMU_GIF_lmltpz.mp4";
+const gif2 = "https://res.cloudinary.com/dlsyveahz/video/upload/FK_VID_misdhv.mp4";
+const gif3 = "https://res.cloudinary.com/dlsyveahz/video/upload/PL_GIF_fb2qv4.mp4";
 
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -41,37 +38,28 @@ const ScrollTriggerCircularCards = ({
   const touchStartYRef = useRef<number>(0);
   const touchTimeStartRef = useRef<number>(0);
 
-  // Create an array with all portfolio images, duplicated to get 18 items
+  const videoSources = new Set([gif1, gif2, gif3]);
+
   const portfolioImages = [
     gif3,
-    photo1,
     photo2,
     gif1,
     profile,
     gif2,
-    photo4,
-    photo3,
 
     gif3,
-    photo1,
     photo2,
     gif1,
     profile,
     gif2,
-    photo4,
-    photo3,
   ];
 
-  // Add an array of project titles and corresponding paths
   const projects = [
     { title: "Pukul Lima", path: "pukul-lima" },
-    { title: "Film Photography", path: "street-photography" },
     { title: "Work Experience", path: "work-experience" },
     { title: "Don't Wake Me Up", path: "dont-wake-me-up" },
     { title: "About Me", path: "about-me" },
     { title: "Finders Keepers", path: "finders-keepers" },
-    { title: "Editorial Photography", path: "fashion-photography" },
-    { title: "Film Photography", path: "urban-photography" },
   ];
 
   // Check if device is mobile
@@ -527,16 +515,15 @@ const ScrollTriggerCircularCards = ({
       <div className="header"></div>
       <section className="slider-section">
         <div className="wheel" ref={wheelRef}>
-          {[...Array(16)].map((_, i) => {
+          {[...Array(10)].map((_, i) => {
             // Reverse the index to affect render order (and thus z-index)
-            const index = 15 - i;
-            // Get the title based on the original image (mod 8)
-            const titleIndex = index % 8;
+            const index = 9 - i;
+            const titleIndex = index % 5;
             const project = projects[titleIndex];
 
             return (
               <div
-                className={`wheel__card card-${index % 8}`}
+                className={`wheel__card card-${index % 5}`}
                 key={index}
                 onClick={() => handleCardClick(project.path)}
                 onTouchStart={(e) => handleCardTouchStart(e)}
@@ -544,7 +531,11 @@ const ScrollTriggerCircularCards = ({
               >
                 <div className="card-container">
                   <h3 className="card-title">{project.title}</h3>
-                  <img src={portfolioImages[index % 16]} alt={project.title} />
+                  {videoSources.has(portfolioImages[index % 10]) ? (
+                    <video src={portfolioImages[index % 10]} autoPlay loop muted playsInline />
+                  ) : (
+                    <img src={portfolioImages[index % 10]} alt={project.title} />
+                  )}
                 </div>
               </div>
             );
