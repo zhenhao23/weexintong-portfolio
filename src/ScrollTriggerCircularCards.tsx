@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./ScrollTriggerCircularCards.css";
-// import LazyImage from "./LazyImage"; // Import the LazyImage component
 import { motion, AnimatePresence } from "framer-motion";
 
 // Import your portfolio images
@@ -12,9 +11,9 @@ import photo2 from "./assets/work experience/BURSTING POINT.png";
 import photo3 from "./assets/urban photography/urban3.jpg";
 import photo4 from "./assets/portfolio pics/fashion3.jpg";
 import profile from "./assets/portfolio pics/profile pic.jpg";
-import gif1 from "./assets/postfolio gif/DWMU GIF (1).gif";
-import gif2 from "./assets/postfolio gif/FK GIF (1).gif";
-import gif3 from "./assets/postfolio gif/PL GIF (1).gif";
+import gif1 from "./assets/portfolio-gif/DWMU GIF (1).gif";
+import gif2 from "./assets/portfolio-gif/FK GIF (1).gif";
+import gif3 from "./assets/portfolio-gif/PL GIF (1).gif";
 
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
