@@ -51,7 +51,7 @@ const AboutMe: React.FC = () => {
           </div>
         </div>
       </div>
-      <ContactBubble showLinkedIn />
+      <ContactBubble />
     </div>
   );
 };

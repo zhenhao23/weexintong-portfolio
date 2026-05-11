@@ -90,15 +90,17 @@ const ScrollTriggerCircularCards = ({
   const bubbleVariants = {
     collapsed: {
       height: isMobile ? "50px" : "25px",
+      width: isMobile ? "100%" : "88px",
       transition: {
         duration: 0.4,
         ease: "easeInOut",
       },
     },
     expanded: {
-      height: isMobile ? "110px" : "94px", // Adjust these values based on your content
+      height: isMobile ? "110px" : "94px",
+      width: isMobile ? "100%" : "360px",
       transition: {
-        duration: 0.8,
+        duration: 0.4,
         ease: "easeInOut",
       },
     },

@@ -220,6 +220,17 @@ img {
     left: 0;
     transform: none;
     border-radius: 0 0 8px 8px;
+    min-width: unset;
+    overflow: hidden;
+    padding: 4px 16px 0px 16px;
+  }
+
+  .home-bubble .contact-email {
+    white-space: nowrap;
+  }
+
+  .home-bubble .contact-title {
+    white-space: nowrap;
   }
 
   .corner-text.home-about-me {

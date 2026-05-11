@@ -3,11 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { EMAIL, INSTAGRAM_URL, LINKEDIN_URL } from "../constants";
 
-interface ContactBubbleProps {
-  showLinkedIn?: boolean;
-}
-
-const ContactBubble: React.FC<ContactBubbleProps> = ({ showLinkedIn = false }) => {
+const ContactBubble: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const isMobile = useIsMobile();
   const bubbleRef = useRef<HTMLDivElement>(null);
@@ -62,11 +58,9 @@ const ContactBubble: React.FC<ContactBubbleProps> = ({ showLinkedIn = false }) =
             <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
               Instagram
             </a>
-            {showLinkedIn && (
-              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
-                LinkedIn
-              </a>
-            )}
+            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
+              LinkedIn
+            </a>
           </div>
         </motion.div>
       </AnimatePresence>

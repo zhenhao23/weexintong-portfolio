@@ -90,7 +90,7 @@ const DontWakeMeUp: React.FC = () => {
           </div>
         </div>
       </div>
-      <ContactBubble showLinkedIn />
+      <ContactBubble />
     </div>
   );
 };
