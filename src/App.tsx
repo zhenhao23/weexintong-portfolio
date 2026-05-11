@@ -4,6 +4,8 @@ import FindersKeepers from "./projects/FindersKeepers";
 import DontWakeMeUp from "./projects/DontWakeMeUp";
 import WorkExperience from "./projects/WorkExperience";
 import AboutMe from "./projects/AboutMe";
+import Aerowhite from "./projects/Aerowhite";
+import DazedOff from "./projects/DazedOff";
 import {
   BrowserRouter as Router,
   Routes,
@@ -37,6 +39,8 @@ function App() {
         <Route path="/project/dont-wake-me-up" element={<DontWakeMeUp />} />
         <Route path="/project/work-experience" element={<WorkExperience />} />
         <Route path="/project/about-me" element={<AboutMe />} />
+        <Route path="/project/aerowhite" element={<Aerowhite />} />
+        <Route path="/project/dazed-off" element={<DazedOff />} />
         <Route path="/project/:projectId" element={<PukulLima />} />
       </Routes>
     </Router>

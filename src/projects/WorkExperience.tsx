@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import Masonry from "react-masonry-css";
 import ContactBubble from "../components/ContactBubble";
 
-import BROTHERSINARMS from "../assets/work experience/BROTHERS IN ARMS.jpg";
-import BURSTINGPOINT from "../assets/work experience/BURSTING POINT.png";
-import OPERATIONBLACKOPS from "../assets/work experience/OPERATION BLACK-OPS.png";
-import PULAU from "../assets/work experience/PULAU.png";
+const BROTHERSINARMS = "https://res.cloudinary.com/dlsyveahz/image/upload/BROTHERS_IN_ARMS_envm7x.jpg";
+const BURSTINGPOINT = "https://res.cloudinary.com/dlsyveahz/image/upload/BURSTING_POINT_h4nenc.png";
+const OPERATIONBLACKOPS = "https://res.cloudinary.com/dlsyveahz/image/upload/OPERATION_BLACK-OPS_rfklva.png";
+const PULAU = "https://res.cloudinary.com/dlsyveahz/image/upload/PULAU_oebsh4.png";
 
 const breakpointColumnsObj = {
   default: 3,
@@ -56,10 +56,10 @@ const WorkExperience: React.FC = () => {
                 </span>
               </div>
               <div className="header-right">
-                <span className="nav-button" onClick={() => navigate("/project/dont-wake-me-up")}>
+                <span className="nav-button" onClick={() => navigate("/project/dazed-off")}>
                   [previous]
                 </span>
-                <span className="nav-button" onClick={() => navigate("/project/street-photography")}>
+                <span className="nav-button" onClick={() => navigate("/project/about-me")}>
                   [next]
                 </span>
               </div>

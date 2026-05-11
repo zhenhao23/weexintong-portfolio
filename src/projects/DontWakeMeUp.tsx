@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./ProjectShowcase.css";
-import plGif from "../assets/portfolio-gif/DWMU GIF.gif";
+const plGif = "https://res.cloudinary.com/dlsyveahz/video/upload/DWMU_GIF_lmltpz.mp4";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import ContactBubble from "../components/ContactBubble";
@@ -32,10 +32,10 @@ const DontWakeMeUp: React.FC = () => {
                 </span>
               </div>
               <div className="header-right">
-                <span className="nav-button" onClick={() => navigate("/project/about-me")}>
+                <span className="nav-button" onClick={() => navigate("/project/pukul-lima")}>
                   [previous]
                 </span>
-                <span className="nav-button" onClick={() => navigate("/project/work-experience")}>
+                <span className="nav-button" onClick={() => navigate("/project/finders-keepers")}>
                   [next]
                 </span>
               </div>
@@ -43,7 +43,7 @@ const DontWakeMeUp: React.FC = () => {
             <div className="content-container">
               <div className={`gif-container ${showInfo ? "blurred" : ""}`}>
                 <a href="https://vimeo.com/1076739686" target="_blank" rel="noopener noreferrer">
-                  <img src={plGif} alt="Don't Wake Me Up Project" />
+                  <video src={plGif} autoPlay loop muted playsInline />
                 </a>
               </div>
 

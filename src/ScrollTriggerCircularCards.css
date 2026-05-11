@@ -82,7 +82,7 @@ h1 {
   max-width: 300px;
 }
 .card-3 {
-  max-width: 280px;
+  max-width: 200px;
 }
 .card-4 {
   max-width: 300px;
@@ -232,13 +232,13 @@ img {
     max-width: 420px;
   }
   .card-1 {
-    max-width: 420px;
+    max-width: 320px;
   }
   .card-2 {
     max-width: 360px;
   }
   .card-3 {
-    max-width: 420px;
+    max-width: 320px;
   }
   .card-4 {
     max-width: 420px;
@@ -276,13 +276,13 @@ img {
     max-width: 320px;
   }
   .card-1 {
-    max-width: 320px;
+    max-width: 240px;
   }
   .card-2 {
     max-width: 260px;
   }
   .card-3 {
-    max-width: 320px;
+    max-width: 240px;
   }
   .card-4 {
     max-width: 320px;

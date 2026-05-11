@@ -6,8 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // Import your portfolio images
 // You can replace the placeholders with actual imports later
-import photo2 from "./assets/work experience/BURSTING POINT.png";
-import profile from "./assets/portfolio pics/profile pic.jpg";
+const photo2 = "https://res.cloudinary.com/dlsyveahz/image/upload/BURSTING_POINT_h4nenc.png";
+const profile = "https://res.cloudinary.com/dlsyveahz/image/upload/Director_s_Portrait_dazed_off_myq6hr.jpg";
 const gif1 = "https://res.cloudinary.com/dlsyveahz/video/upload/DWMU_GIF_lmltpz.mp4";
 const gif2 = "https://res.cloudinary.com/dlsyveahz/video/upload/FK_VID_misdhv.mp4";
 const gif3 = "https://res.cloudinary.com/dlsyveahz/video/upload/PL_GIF_fb2qv4.mp4";

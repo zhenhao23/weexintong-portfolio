@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./ProjectShowcase.css";
-import plGif from "../assets/portfolio-gif/PL GIF.gif";
+const plGif = "https://res.cloudinary.com/dlsyveahz/video/upload/PL_GIF_fb2qv4.mp4";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "../hooks/useIsMobile";
@@ -34,10 +34,10 @@ const PukulLima: React.FC = () => {
                 </span>
               </div>
               <div className="header-right">
-                <span className="nav-button" onClick={() => navigate("/project/street-photography")}>
+                <span className="nav-button" onClick={() => navigate("/project/about-me")}>
                   [previous]
                 </span>
-                <span className="nav-button" onClick={() => navigate("/project/urban-photography")}>
+                <span className="nav-button" onClick={() => navigate("/project/dont-wake-me-up")}>
                   [next]
                 </span>
               </div>
@@ -45,7 +45,7 @@ const PukulLima: React.FC = () => {
             <div className="content-container">
               <div className={`gif-container ${showInfo ? "blurred" : ""}`}>
                 <a href="https://vimeo.com/1114126789" target="_blank" rel="noopener noreferrer">
-                  <img src={plGif} alt="Pukul Lima Project" />
+                  <video src={plGif} autoPlay loop muted playsInline />
                 </a>
               </div>
 
