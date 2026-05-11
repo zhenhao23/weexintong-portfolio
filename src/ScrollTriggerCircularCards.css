@@ -320,6 +320,10 @@ img {
     max-width: 320px;
   }
 
+  .corner-text.home-about-me {
+    display: none;
+  }
+
   .card-title {
     font-size: 0.5rem; /* Slightly smaller font for card titles */
   }
