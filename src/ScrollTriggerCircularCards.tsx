@@ -552,7 +552,7 @@ const ScrollTriggerCircularCards = ({
       </section>
       <motion.div
         ref={bubbleRef}
-        className={`contact-bubble ${isContactExpanded ? "expanded" : ""}`}
+        className={`contact-bubble home-bubble ${isContactExpanded ? "expanded" : ""}`}
         variants={bubbleVariants}
         initial="collapsed"
         animate={isContactExpanded ? "expanded" : "collapsed"}
@@ -636,7 +636,7 @@ const ScrollTriggerCircularCards = ({
           </motion.div>
         </AnimatePresence>
       </motion.div>
-      <div className="corner-text top-left">
+      <div className="corner-text bottom-left home-about-me">
         <a
           onClick={(e) => {
             e.preventDefault();

@@ -57,7 +57,7 @@ const Aerowhite: React.FC = () => {
                     animate="visible"
                     exit="hidden"
                   >
-                    <div className="project-info-content">
+                    <div className="project-info-content aerowhite-content">
                       <h1>Aerowhite</h1>
                       <p className="project-description">
                         aerowhite is a visualiser on girlhood in the dance between comfort &amp; conflict.

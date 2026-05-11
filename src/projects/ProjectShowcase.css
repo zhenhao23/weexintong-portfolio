@@ -622,6 +622,19 @@
 
 /* Media query for smaller screens */
 @media screen and (max-width: 767px) {
+  .aerowhite-content.project-info-content {
+    max-height: 82vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 20px 20px;
+  }
+
+  .aerowhite-content.project-info-content::-webkit-scrollbar {
+    display: none;
+  }
+
+
   .contact-bubble {
     width: 100%; /* Full width on mobile */
     left: 0;

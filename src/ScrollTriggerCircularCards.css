@@ -210,8 +210,23 @@ img {
 }
 
 .contact-bubble {
-  z-index: 1000; /* Make sure this is higher than other elements */
-  /* your other styles */
+  z-index: 1000;
+}
+
+@media screen and (min-width: 1025px) {
+  .contact-bubble.home-bubble {
+    top: 0;
+    bottom: auto;
+    left: 0;
+    transform: none;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .corner-text.home-about-me {
+    pointer-events: auto;
+    user-select: auto;
+    cursor: pointer;
+  }
 }
 
 /* ...existing code... */
