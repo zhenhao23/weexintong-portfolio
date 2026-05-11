@@ -11,6 +11,8 @@ import profile from "./assets/portfolio pics/profile pic.jpg";
 const gif1 = "https://res.cloudinary.com/dlsyveahz/video/upload/DWMU_GIF_lmltpz.mp4";
 const gif2 = "https://res.cloudinary.com/dlsyveahz/video/upload/FK_VID_misdhv.mp4";
 const gif3 = "https://res.cloudinary.com/dlsyveahz/video/upload/PL_GIF_fb2qv4.mp4";
+const gif4 = "https://res.cloudinary.com/dlsyveahz/video/upload/aerowhite_teaser_final_bokp8d.mp4";
+const gif5 = "https://res.cloudinary.com/dlsyveahz/video/upload/DAZED_OFF_TRAILER_j69iqv.mp4";
 
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -38,7 +40,7 @@ const ScrollTriggerCircularCards = ({
   const touchStartYRef = useRef<number>(0);
   const touchTimeStartRef = useRef<number>(0);
 
-  const videoSources = new Set([gif1, gif2, gif3]);
+  const videoSources = new Set([gif1, gif2, gif3, gif4, gif5]);
 
   const portfolioImages = [
     gif3,
@@ -46,12 +48,16 @@ const ScrollTriggerCircularCards = ({
     gif1,
     profile,
     gif2,
+    gif4,
+    gif5,
 
     gif3,
     photo2,
     gif1,
     profile,
     gif2,
+    gif4,
+    gif5,
   ];
 
   const projects = [
@@ -60,6 +66,8 @@ const ScrollTriggerCircularCards = ({
     { title: "Don't Wake Me Up", path: "dont-wake-me-up" },
     { title: "About Me", path: "about-me" },
     { title: "Finders Keepers", path: "finders-keepers" },
+    { title: "Aerowhite", path: "aerowhite" },
+    { title: "Dazed Off", path: "dazed-off" },
   ];
 
   // Check if device is mobile
@@ -515,15 +523,15 @@ const ScrollTriggerCircularCards = ({
       <div className="header"></div>
       <section className="slider-section">
         <div className="wheel" ref={wheelRef}>
-          {[...Array(10)].map((_, i) => {
+          {[...Array(14)].map((_, i) => {
             // Reverse the index to affect render order (and thus z-index)
-            const index = 9 - i;
-            const titleIndex = index % 5;
+            const index = 13 - i;
+            const titleIndex = index % 7;
             const project = projects[titleIndex];
 
             return (
               <div
-                className={`wheel__card card-${index % 5}`}
+                className={`wheel__card card-${index % 7}`}
                 key={index}
                 onClick={() => handleCardClick(project.path)}
                 onTouchStart={(e) => handleCardTouchStart(e)}
@@ -531,10 +539,10 @@ const ScrollTriggerCircularCards = ({
               >
                 <div className="card-container">
                   <h3 className="card-title">{project.title}</h3>
-                  {videoSources.has(portfolioImages[index % 10]) ? (
-                    <video src={portfolioImages[index % 10]} autoPlay loop muted playsInline />
+                  {videoSources.has(portfolioImages[index % 14]) ? (
+                    <video src={portfolioImages[index % 14]} autoPlay loop muted playsInline />
                   ) : (
-                    <img src={portfolioImages[index % 10]} alt={project.title} />
+                    <img src={portfolioImages[index % 14]} alt={project.title} />
                   )}
                 </div>
               </div>

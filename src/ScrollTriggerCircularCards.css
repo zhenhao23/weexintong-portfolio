@@ -76,15 +76,21 @@ h1 {
   max-width: 400px;
 }
 .card-1 {
-  max-width: 300px;
+  max-width: 200px;
 }
 .card-2 {
   max-width: 300px;
 }
 .card-3 {
-  max-width: 400px;
+  max-width: 280px;
 }
 .card-4 {
+  max-width: 300px;
+}
+.card-5 {
+  max-width: 300px;
+}
+.card-6 {
   max-width: 300px;
 }
 
@@ -237,6 +243,12 @@ img {
   .card-4 {
     max-width: 420px;
   }
+  .card-5 {
+    max-width: 420px;
+  }
+  .card-6 {
+    max-width: 420px;
+  }
 
   h1 {
     font-size: 12vw; /* Larger font size for better readability */
@@ -273,6 +285,12 @@ img {
     max-width: 320px;
   }
   .card-4 {
+    max-width: 320px;
+  }
+  .card-5 {
+    max-width: 320px;
+  }
+  .card-6 {
     max-width: 320px;
   }
 
