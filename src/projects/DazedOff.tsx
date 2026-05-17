@@ -43,7 +43,9 @@ const DazedOff: React.FC = () => {
             </div>
             <div className="content-container">
               <div className={`gif-container ${showInfo ? "blurred" : ""}`}>
-                <video src={videoSrc} autoPlay loop muted playsInline />
+                <a href="https://www.instagram.com/dazed__off?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" style={{ display: "block" }}>
+                  <video src={videoSrc} autoPlay loop muted playsInline style={{ pointerEvents: "none" }} />
+                </a>
               </div>
 
               <AnimatePresence>
@@ -56,9 +58,9 @@ const DazedOff: React.FC = () => {
                     exit="hidden"
                   >
                     <div className="project-info-content dazed-off-content">
-                      <h1>Dazed Off (残忆)</h1>
+                      <h1>Dazed Off (<span className="stkaiti">残忆</span>)</h1>
                       <p className="project-description">
-                        dazed off (残忆) is a narrative drama/thriller short film. It follows Vera (28),
+                        dazed off (<span className="stkaiti">残忆</span>) is a narrative drama/thriller short film. It follows Vera (28),
                         a burnt out office worker who escapes an endless white room. She eventually falls
                         through the ceiling, only to see it perfectly intact. Amidst the confusion, she
                         senses a stalker following her. Vera gives chase, only to find herself haunted by

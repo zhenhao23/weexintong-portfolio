@@ -66,54 +66,58 @@ const Aerowhite: React.FC = () => {
                       <div className="credits-container two-columns">
                         <div className="credits-column">
                           <div className="credit-item">
-                            <span className="credit-role">Creative director, producer &amp; editor</span>
-                            <span className="credit-name">Xin Tong</span>
+                            <span className="credit-role">creative director, producer &amp; editor</span>
+                            <span className="credit-name"><a href="https://www.instagram.com/midpovs/" target="_blank" rel="noopener noreferrer">@midpovs</a></span>
                           </div>
                           <div className="credit-item">
-                            <span className="credit-role">Soundtrack</span>
-                            <span className="credit-name">apocalyptic calm — Sofia CC</span>
+                            <span className="credit-role">soundtrack- apocalyptic calm</span>
+                            <span className="credit-name"><a href="https://www.instagram.com/s0fia_cc/" target="_blank" rel="noopener noreferrer">@s0fia_cc</a></span>
                           </div>
                           <div className="credit-item">
-                            <span className="credit-role">Cast</span>
-                            <span className="credit-name">@outsspaced &amp; Ruth Ho</span>
+                            <span className="credit-role">cast</span>
+                            <span className="credit-name">
+                              <a href="https://www.instagram.com/outsspaced/" target="_blank" rel="noopener noreferrer">@outsspaced</a>
+                              {" "}
+                              <a href="https://www.instagram.com/ruth_ho_/" target="_blank" rel="noopener noreferrer">@ruth_ho_</a>
+                            </span>
                           </div>
                           <div className="credit-item">
-                            <span className="credit-role">Producer</span>
-                            <span className="credit-name">@mwabelleee</span>
+                            <span className="credit-role">producer</span>
+                            <span className="credit-name"><a href="https://www.instagram.com/mwabelleee/" target="_blank" rel="noopener noreferrer">@mwabelleee</a></span>
                           </div>
                           <div className="credit-item">
-                            <span className="credit-role">Co-producer &amp; AD</span>
-                            <span className="credit-name">Nisha Adarshan</span>
+                            <span className="credit-role">co-producer + AD</span>
+                            <span className="credit-name"><a href="https://www.instagram.com/nishaadarshan/" target="_blank" rel="noopener noreferrer">@nishaadarshan</a></span>
                           </div>
                           <div className="credit-item">
-                            <span className="credit-role">DOP</span>
-                            <span className="credit-name">@ungrayy</span>
+                            <span className="credit-role">dop</span>
+                            <span className="credit-name"><a href="https://www.instagram.com/ungrayy/" target="_blank" rel="noopener noreferrer">@ungrayy</a></span>
                           </div>
                         </div>
                         <div className="credits-column">
                           <div className="credit-item">
-                            <span className="credit-role">Gaffer</span>
-                            <span className="credit-name">@supastinga</span>
+                            <span className="credit-role">gaffer</span>
+                            <span className="credit-name"><a href="https://www.instagram.com/supastinga/" target="_blank" rel="noopener noreferrer">@supastinga</a></span>
                           </div>
                           <div className="credit-item">
-                            <span className="credit-role">Art director</span>
-                            <span className="credit-name">Joshua Toh</span>
+                            <span className="credit-role">art director</span>
+                            <span className="credit-name"><a href="https://www.instagram.com/joshuatoess/" target="_blank" rel="noopener noreferrer">@joshuatoess</a></span>
                           </div>
                           <div className="credit-item">
-                            <span className="credit-role">HMU &amp; Wardrobe stylist</span>
-                            <span className="credit-name">@ruanertang</span>
+                            <span className="credit-role">hmu &amp; wardrobe stylist</span>
+                            <span className="credit-name"><a href="https://www.instagram.com/ruanertang/" target="_blank" rel="noopener noreferrer">@ruanertang</a></span>
                           </div>
                           <div className="credit-item">
-                            <span className="credit-role">Dressmaker</span>
-                            <span className="credit-name">@danxsh.s</span>
+                            <span className="credit-role">dressmaker</span>
+                            <span className="credit-name"><a href="https://www.instagram.com/danxsh.s/" target="_blank" rel="noopener noreferrer">@danxsh.s</a></span>
                           </div>
                           <div className="credit-item">
-                            <span className="credit-role">Narration</span>
-                            <span className="credit-name">Ruth Ho</span>
+                            <span className="credit-role">narration</span>
+                            <span className="credit-name"><a href="https://www.instagram.com/ruth_ho_/" target="_blank" rel="noopener noreferrer">@ruth_ho_</a></span>
                           </div>
                           <div className="credit-item">
-                            <span className="credit-role">Teaser track remixer</span>
-                            <span className="credit-name">Joshua Toh</span>
+                            <span className="credit-role">teaser track remixer</span>
+                            <span className="credit-name"><a href="https://www.instagram.com/joshuatoess/" target="_blank" rel="noopener noreferrer">@joshuatoess</a></span>
                           </div>
                         </div>
                       </div>

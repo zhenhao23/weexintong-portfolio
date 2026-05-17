@@ -2,6 +2,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
 
 @font-face {
+  font-family: "STKaiti";
+  src: url("../assets/fonts/STKaiti.woff2") format("woff2"),
+    url("../assets/fonts/STKaiti.woff") format("woff"),
+    url("../assets/fonts/STKaiti.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.stkaiti {
+  font-family: "STKaiti", serif;
+}
+
+@font-face {
   font-family: "New Science Light";
   src: url("../assets/fonts/fonnts.com-New_Science_Light.otf")
       format("opentype"),

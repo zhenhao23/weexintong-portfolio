@@ -17,6 +17,11 @@ const breakpointColumnsObj = {
 
 const workItems = [
   {
+    src: BROTHERSINARMS,
+    alt: "TOGETHER DAYS (art assist)",
+    link: "https://www.isabella-tan.com/brothersinarms",
+  },
+  {
     src: BURSTINGPOINT,
     alt: "BURSTING POINT (casting assist)",
     link: "https://www.youtube.com/watch?v=QbjsdQfy76o",
@@ -30,11 +35,6 @@ const workItems = [
     src: OPERATIONBLACKOPS,
     alt: "OPERATION BLACK-OPS (f&b crew)",
     link: "https://www.youtube.com/watch?v=k1fkCGZntTY",
-  },
-  {
-    src: BROTHERSINARMS,
-    alt: "TOGETHER DAYS (art assist)",
-    link: "https://www.isabella-tan.com/brothersinarms",
   },
 ];
 

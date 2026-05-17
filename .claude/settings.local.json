@@ -8,7 +8,10 @@
       "Bash(git add *)",
       "Bash(npx tsc *)",
       "Bash(claude doctor *)",
-      "PowerShell(claude doctor *)"
+      "PowerShell(claude doctor *)",
+      "Bash(cp \"C:\\\\Users\\\\weezh\\\\Downloads\\\\Fonts_Package_5f576887c36e8f74e5e713402e81b4c2\\\\STKaiti\\\\web\\\\font\\\\STKaiti.woff2\" \"C:\\\\Users\\\\weezh\\\\Projects\\\\weexintong-portfolio\\\\src\\\\assets\\\\fonts\\\\STKaiti.woff2\")",
+      "Bash(cp \"C:\\\\Users\\\\weezh\\\\Downloads\\\\Fonts_Package_5f576887c36e8f74e5e713402e81b4c2\\\\STKaiti\\\\web\\\\font\\\\STKaiti.woff\" \"C:\\\\Users\\\\weezh\\\\Projects\\\\weexintong-portfolio\\\\src\\\\assets\\\\fonts\\\\STKaiti.woff\")",
+      "Bash(cp \"C:\\\\Users\\\\weezh\\\\Downloads\\\\Fonts_Package_5f576887c36e8f74e5e713402e81b4c2\\\\STKaiti\\\\web\\\\font\\\\STKaiti.ttf\" \"C:\\\\Users\\\\weezh\\\\Projects\\\\weexintong-portfolio\\\\src\\\\assets\\\\fonts\\\\STKaiti.ttf\")"
     ]
   }
 }
