@@ -68,8 +68,8 @@ const ScrollTriggerCircularCards = ({
     { title: "Don't Wake Me Up", path: "dont-wake-me-up" },
     { title: "About Me", path: "about-me" },
     { title: "Finders Keepers", path: "finders-keepers" },
-    { title: "Aerowhite", path: "aerowhite" },
-    { title: "Dazed Off", path: "dazed-off" },
+    { title: "aerowhite", path: "aerowhite" },
+    { title: "dazed off", path: "dazed-off" },
   ];
 
   useEffect(() => {
@@ -577,7 +577,6 @@ const ScrollTriggerCircularCards = ({
                 >
                   <div className="lets-talk-modal-header">
                     <h3 className="contact-title lets-talk-modal-title">Let's talk</h3>
-                    <span className="nav-button close-button" onClick={() => setIsModalOpen(false)}>[close]</span>
                   </div>
                   <a href={`mailto:${EMAIL}`} className="contact-email">{EMAIL}</a>
                   <div className="social-links">
