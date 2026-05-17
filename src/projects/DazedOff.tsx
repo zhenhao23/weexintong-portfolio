@@ -58,7 +58,7 @@ const DazedOff: React.FC = () => {
                     exit="hidden"
                   >
                     <div className="project-info-content dazed-off-content">
-                      <h1>Dazed Off (<span className="stkaiti">残忆</span>)</h1>
+                      <h1>dazed off (<span className="stkaiti">残忆</span>)</h1>
                       <p className="project-description">
                         dazed off (<span className="stkaiti">残忆</span>) is a narrative drama/thriller short film. It follows Vera (28),
                         a burnt out office worker who escapes an endless white room. She eventually falls
