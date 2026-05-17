@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./ScrollTriggerCircularCards.css";
 import { motion, AnimatePresence } from "framer-motion";
+import { EMAIL, INSTAGRAM_URL, LINKEDIN_URL } from "./constants";
 
 // Import your portfolio images
 // You can replace the placeholders with actual imports later
@@ -32,6 +33,7 @@ const ScrollTriggerCircularCards = ({
   const lastTimeRef = useRef<number>(0);
   const isClickingRef = useRef<boolean>(false);
   const clickStartTimeRef = useRef<number>(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isContactExpanded, setIsContactExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const bubbleRef = useRef<HTMLDivElement>(null);
@@ -70,40 +72,39 @@ const ScrollTriggerCircularCards = ({
     { title: "Dazed Off", path: "dazed-off" },
   ];
 
-  // Check if device is mobile
   useEffect(() => {
-    const checkIfMobile = () => {
-      setIsMobile(window.innerWidth <= 768); // Common breakpoint for mobile
-    };
-
-    // Initial check
+    const checkIfMobile = () => setIsMobile(window.innerWidth <= 768);
     checkIfMobile();
-
-    // Add event listener for window resize
     window.addEventListener("resize", checkIfMobile);
-
-    // Clean up
     return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
 
-  // Animation variants
-  const bubbleVariants = {
+  const mobileBubbleVariants = {
     collapsed: {
-      height: isMobile ? "50px" : "25px",
-      width: isMobile ? "100%" : "88px",
-      transition: {
-        duration: 0.4,
-        ease: "easeInOut",
-      },
+      height: "50px",
+      width: "100%",
+      transition: { duration: 0.4, ease: "easeInOut" },
     },
     expanded: {
-      height: isMobile ? "110px" : "94px",
-      width: isMobile ? "100%" : "360px",
-      transition: {
-        duration: 0.4,
-        ease: "easeInOut",
-      },
+      height: "110px",
+      width: "100%",
+      transition: { duration: 0.4, ease: "easeInOut" },
     },
+  };
+
+  const handleBubbleClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest("a")) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setIsContactExpanded((prev) => !prev);
+  };
+
+  const handleBubbleTouchEnd = (e: React.TouchEvent) => {
+    const linkElement = (e.target as HTMLElement).closest("a");
+    if (linkElement) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setIsContactExpanded((prev) => !prev);
   };
 
   // Handle touch events for cards
@@ -145,65 +146,6 @@ const ScrollTriggerCircularCards = ({
     }
 
     isClickingRef.current = false;
-  };
-
-  // Handle mouse events with a delay to prevent flickering (for desktop)
-  const handleMouseEnter = () => {
-    if (!isMobile) {
-      setIsContactExpanded(true);
-    }
-  };
-
-  const handleMouseLeave = (e: React.MouseEvent) => {
-    // Only apply hover behavior on desktop
-    if (!isMobile) {
-      // Check if the mouse is truly leaving the entire bubble
-      if (
-        bubbleRef.current &&
-        !bubbleRef.current.contains(e.relatedTarget as Node)
-      ) {
-        setIsContactExpanded(false);
-      }
-    }
-  };
-
-  const handleBubbleClick = (e: React.MouseEvent) => {
-    // Don't intercept clicks on links or their children
-    if ((e.target as HTMLElement).closest("a")) {
-      return; // Allow the link click to proceed normally
-    }
-
-    // Make sure the event doesn't propagate for non-link clicks
-    e.preventDefault();
-    e.stopPropagation();
-
-    // console.log(
-    //   "Bubble clicked, mobile:",
-    //   isMobile,
-    //   "current state:",
-    //   isContactExpanded
-    // );
-
-    // Force the toggle regardless of mobile status
-    setIsContactExpanded((prev) => !prev);
-  };
-
-  const handleBubbleTouchEnd = (e: React.TouchEvent) => {
-    // Get the actual target element that was touched
-    const target = e.target as HTMLElement;
-
-    // Check if the touch is on a link or any of its children
-    const linkElement = target.closest("a");
-    if (linkElement) {
-      // For link elements, allow the default behavior (navigate to href)
-      // We don't need to do anything here - just let the event propagate
-      return;
-    }
-
-    // For non-link elements, prevent default and toggle the bubble
-    e.preventDefault();
-    e.stopPropagation();
-    setIsContactExpanded((prev) => !prev);
   };
 
   // Handler for card click
@@ -552,92 +494,102 @@ const ScrollTriggerCircularCards = ({
           })}
         </div>
       </section>
-      <motion.div
-        ref={bubbleRef}
-        className={`contact-bubble home-bubble ${isContactExpanded ? "expanded" : ""}`}
-        variants={bubbleVariants}
-        initial="collapsed"
-        animate={isContactExpanded ? "expanded" : "collapsed"}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onClick={handleBubbleClick}
-        onTouchEnd={handleBubbleTouchEnd}
-      >
-        <h3 className="contact-title">Let's talk</h3>
-        <AnimatePresence>
-          <motion.div
-            className="contact-content"
-            // variants={contentVariants}
-            initial="collapsed"
-            animate={isContactExpanded ? "expanded" : "collapsed"}
-          >
-            <a
-              href="mailto:wxintong.work@gmail.com"
-              className="contact-email"
-              onClick={(e) => {
-                e.stopPropagation();
-                // For mobile devices, explicitly handle the email link
-                if (isMobile) {
-                  window.location.href = "mailto:wxintong.work@gmail.com";
-                }
-              }}
-              onTouchEnd={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                window.location.href = "mailto:wxintong.work@gmail.com";
-              }}
+      {isMobile ? (
+        <motion.div
+          ref={bubbleRef}
+          className={`contact-bubble home-bubble ${isContactExpanded ? "expanded" : ""}`}
+          variants={mobileBubbleVariants}
+          initial="collapsed"
+          animate={isContactExpanded ? "expanded" : "collapsed"}
+          onClick={handleBubbleClick}
+          onTouchEnd={handleBubbleTouchEnd}
+        >
+          <h3 className="contact-title">Let's talk</h3>
+          <AnimatePresence>
+            <motion.div
+              className="contact-content"
+              initial="collapsed"
+              animate={isContactExpanded ? "expanded" : "collapsed"}
             >
-              wxintong.work@gmail.com
-            </a>
-            <div className="social-links">
               <a
-                href="https://www.instagram.com/midpovs"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // On mobile, directly navigate to the URL
-                  if (isMobile) {
-                    window.open("https://www.instagram.com/midpovs", "_blank");
-                  }
-                }}
-                onTouchEnd={(e) => {
-                  e.stopPropagation();
-                  // Explicitly prevent the default touchend behavior and handle navigation manually
-                  e.preventDefault();
-                  window.open("https://www.instagram.com/midpovs", "_blank");
-                }}
-              >
-                Instagram
-              </a>
-              <a
-                href="https://www.linkedin.com/in/weexintong"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (isMobile) {
-                    window.open(
-                      "https://www.linkedin.com/in/weexintong",
-                      "_blank"
-                    );
-                  }
-                }}
+                href={`mailto:${EMAIL}`}
+                className="contact-email"
                 onTouchEnd={(e) => {
                   e.stopPropagation();
                   e.preventDefault();
-                  window.open(
-                    "https://www.linkedin.com/in/weexintong",
-                    "_blank"
-                  );
+                  window.location.href = `mailto:${EMAIL}`;
                 }}
               >
-                LinkedIn
+                {EMAIL}
               </a>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </motion.div>
+              <div className="social-links">
+                <a
+                  href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onTouchEnd={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    window.open(INSTAGRAM_URL, "_blank");
+                  }}
+                >
+                  Instagram
+                </a>
+                <a
+                  href={LINKEDIN_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onTouchEnd={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    window.open(LINKEDIN_URL, "_blank");
+                  }}
+                >
+                  LinkedIn
+                </a>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
+      ) : (
+        <>
+          <div className="lets-talk-trigger" onClick={() => setIsModalOpen(true)}>
+            Let's talk
+          </div>
+
+          <AnimatePresence>
+            {isModalOpen && (
+              <motion.div
+                className="lets-talk-overlay"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setIsModalOpen(false)}
+              >
+                <motion.div
+                  className="lets-talk-modal"
+                  initial={{ opacity: 0, y: -12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="lets-talk-modal-header">
+                    <h3 className="contact-title lets-talk-modal-title">Let's talk</h3>
+                    <span className="nav-button close-button" onClick={() => setIsModalOpen(false)}>[close]</span>
+                  </div>
+                  <a href={`mailto:${EMAIL}`} className="contact-email">{EMAIL}</a>
+                  <div className="social-links">
+                    <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">Instagram</a>
+                    <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </>
+      )}
       <div className="corner-text bottom-left home-about-me">
         <a
           onClick={(e) => {

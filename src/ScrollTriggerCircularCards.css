@@ -9,6 +9,17 @@
 }
 
 @font-face {
+  font-family: "New Science Light";
+  src:
+    url("./assets/fonts/fonnts.com-New_Science_Light.otf") format("opentype"),
+    url("./assets/fonts/fonnts.com-New_Science_Light_Extended.otf")
+      format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "New Science Medium";
   src:
     url("./assets/fonts/fonnts.com-New_Science_Medium.otf") format("opentype"),
@@ -209,35 +220,101 @@ img {
   flex-grow: 1; /* Allow the image to fill available space */
 }
 
-.contact-bubble {
+.lets-talk-trigger {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 6px 12px;
+  font-family: "New Science Light", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: #7e7e7e;
+  cursor: pointer;
   z-index: 1000;
+  transition: color 0.2s ease;
+}
+
+.lets-talk-trigger:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.lets-talk-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lets-talk-modal {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 8px;
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 3px 8px rgba(0, 0, 0, 0.08);
+  padding: 16px 36px 28px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lets-talk-modal-header {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.lets-talk-modal-header .close-button {
+  position: absolute;
+  right: 0;
+}
+
+.lets-talk-modal-title {
+  font-size: 14px !important;
+  margin: 0 !important;
+  color: #7e7e7e !important;
 }
 
 @media screen and (min-width: 1025px) {
-  .contact-bubble.home-bubble {
-    top: 0;
-    bottom: auto;
-    left: 0;
-    transform: none;
-    border-radius: 0 0 8px 8px;
-    min-width: unset;
-    overflow: hidden;
-    padding: 4px 16px 0px 16px;
-  }
-
-  .home-bubble .contact-email {
-    white-space: nowrap;
-  }
-
-  .home-bubble .contact-title {
-    white-space: nowrap;
-  }
-
   .corner-text.home-about-me {
     pointer-events: auto;
     user-select: auto;
     cursor: pointer;
   }
+}
+
+/* Mobile bubble (≤768px) */
+.contact-bubble.home-bubble {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  transform: none;
+  border-radius: 8px 8px 0 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.08);
+  padding: 10px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1000;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* ...existing code... */
