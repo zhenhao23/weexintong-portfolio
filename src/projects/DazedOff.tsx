@@ -43,7 +43,7 @@ const DazedOff: React.FC = () => {
             </div>
             <div className="content-container">
               <div className={`gif-container ${showInfo ? "blurred" : ""}`}>
-                <a href="https://www.instagram.com/dazed__off?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" style={{ display: "block" }}>
+                <a href="https://vimeo.com/1201311297?share=copy&fl=sv&fe=ci#t=0" target="_blank" rel="noopener noreferrer" style={{ display: "block" }}>
                   <video src={videoSrc} autoPlay loop muted playsInline style={{ pointerEvents: "none" }} />
                 </a>
               </div>
